@@ -25,6 +25,10 @@ import { Dashboard } from "assets/styles/home/dashboard";
 import PrimaryArrow from "assets/images/common/arrows/primary-down-bold.svg";
 import StatusCard from "./StatusCard";
 import { ModalPicker } from "components/common/datePickerMobile/modalPicker";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css"; // Import Leaflet CSS
+import MapComponent from "./MapComponent";
+import styled from "styled-components";
 
 let dayLimit = 60;
 let monthLimit = 12;
@@ -312,6 +316,9 @@ export const Container = () => {
       </Dashboard.TitleStyle>
     ));
   };
+  const center = [51.505, -0.09]; // Default center coordinates
+  const markerPosition = [51.505, -0.09]; // Default marker position
+  const position = [51.505, -0.09];
 
   return (
     <Dashboard.DashboardBody>
@@ -405,28 +412,15 @@ export const Container = () => {
           <LoadingSpinner />
         ) : (
           <>
-            <div
+            <NeumorphicBox
               style={{
                 display: "flex",
                 justifyContent: "center",
                 width: "100%",
               }}
             >
-              {selectedTitle === "امروز" ? (
-                <Contor24 dataShow={dayShow} selectedTitle={selectedTitle} />
-              ) : (
-                <Widget
-                  dataShow={
-                    selectedReport === "کارکرد من"
-                      ? monthShow.info[0]
-                      : selectedReport === "مرخصی‌ها"
-                      ? monthShow.info[1]
-                      : null
-                  }
-                  selectedReport={selectedReport}
-                />
-              )}
-            </div>
+              <MapComponent />
+            </NeumorphicBox>
             <StatusCard
               selectedTitle={selectedTitle}
               dayShow={dayShow}
@@ -446,3 +440,13 @@ export const Container = () => {
     </Dashboard.DashboardBody>
   );
 };
+
+const NeumorphicBox = styled.div`
+  background-color: #f0f0f0;
+  border: 5px solid #fff;
+  border-radius: 10px;
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
+    rgba(17, 17, 26, 0.1) 0px 0px 8px;
+  border-raduis: 8px;
+  overflow: hidden;
+`;
