@@ -11,6 +11,7 @@ import Routes from "routes/Routes";
 import Theme from "theme";
 // Base Styles
 import "assets/styles/global/index.css";
+import "leaflet/dist/leaflet.css";
 
 const rootEl = document.getElementById("root");
 

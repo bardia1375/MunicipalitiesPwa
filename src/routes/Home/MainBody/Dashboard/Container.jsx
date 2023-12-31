@@ -29,6 +29,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css"; // Import Leaflet CSS
 import MapComponent from "./MapComponent";
 import styled from "styled-components";
+import { Button } from "components/common";
 
 let dayLimit = 60;
 let monthLimit = 12;
@@ -316,9 +317,7 @@ export const Container = () => {
       </Dashboard.TitleStyle>
     ));
   };
-  const center = [51.505, -0.09]; // Default center coordinates
-  const markerPosition = [51.505, -0.09]; // Default marker position
-  const position = [51.505, -0.09];
+
 
   return (
     <Dashboard.DashboardBody>

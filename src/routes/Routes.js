@@ -10,7 +10,7 @@ import HomeRoutes from "routes/Home/routes";
 import { verifyToken } from "./Auth/Module";
 import axios from "axios";
 import api from "config/config.json";
-
+import "leaflet/dist/leaflet.css";
 const Routes = () => {
   const { isAuthenticated, authLoading, Token } = useSelector(
     (state) => state.auth

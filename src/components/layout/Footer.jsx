@@ -98,8 +98,7 @@ export const Footer = () => {
           ) : trafficModal ? (
             <Arrow width={30} src={Close} alt=""></Arrow>
           ) : (
-            <Arrow width={30} src={LongArrow} alt=""></Arrow>
-          )}
+            <div>start</div>          )}
         </Circle>
         {/* <FooterStyles.Footericon src={Telegram} alt="Telegram" /> */}
         <FooterStyles.MessagesBody

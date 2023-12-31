@@ -100,8 +100,9 @@ export const StatusItem = styled.div`
 `;
 
 export const StatusList = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows:1fr 1fr;
+  grid-template-columns:1fr 1fr;
   width: 100%;
 `;
 

@@ -158,7 +158,7 @@ function StatusCard({
   return (
     <Dashboard.StatusTypes>
       <Dashboard.StatusList>
-        {["مرخصی‌ها", "کارکرد من", "مأموریت‌ها"].map((item, index) => (
+        {["مرخصی‌ها", "کارکرد من", "مأموریت‌ها","تردد"].map((item, index) => (
           <Dashboard.StatusItem
             key={index}
             onClick={() => {
@@ -174,8 +174,8 @@ function StatusCard({
             {selectedReport === item ? (
               <img
                 style={{
-                  width: `${item === "کارکرد من" ? "6vw" : "8vw"}`,
-                  maxWidth: `${item === "کارکرد من" ? "28px" : "40px"}`,
+                  width: `${item === "کارکرد من" ? "6vw" : "30px"}`,
+                  maxWidth: `${item === "کارکرد من" ? "28px" : "30px"}`,
                 }}
                 src={
                   item === "مرخصی‌ها"
@@ -190,7 +190,7 @@ function StatusCard({
               <img
                 style={{
                   width: `${item === "کارکرد من" ? "6vw" : "8vw"}`,
-                  maxWidth: `${item === "کارکرد من" ? "28px" : "40px"}`,
+                  maxWidth: `${item === "کارکرد من" ? "28px" : "30px"}`,
                 }}
                 src={
                   item === "مرخصی‌ها"
@@ -206,7 +206,7 @@ function StatusCard({
           </Dashboard.StatusItem>
         ))}
       </Dashboard.StatusList>
-      <Dashboard.TotalTime>
+      {/* <Dashboard.TotalTime>
         <div
           style={{
             display: "flex",
@@ -517,7 +517,7 @@ function StatusCard({
             </>
           )}
         </div>
-      </Dashboard.Collapse>
+      </Dashboard.Collapse> */}
     </Dashboard.StatusTypes>
   );
 }
