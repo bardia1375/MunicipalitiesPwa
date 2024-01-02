@@ -6,8 +6,12 @@ import { MyMessages } from "./MyMessages";
 import { MyProfile } from "./MyProfile";
 import { MyTraffics } from "./MyTraffics/Container";
 import { WorkReport } from "./WorkReport/Container";
-import { MyLeaves } from "./MyLeaves/Container";
+import { MyWeeklyPlan } from "./MyWeeklyPlan/Container";
 import { MyAssignments } from "./MyAssignments/Container";
+import { MyWorker } from "./MyWorker/Container";
+import { MyDiagram } from "./MyDiagram/Container";
+import { MyDiagramInfo } from "./MyDiagram/MyDiagramInfo/Container";
+import { MyClocking } from "./MyClocking/Container";
 
 const routes = {
   path: "/",
@@ -29,10 +33,41 @@ const routes = {
       path: "/",
       element: <MyTraffics />,
     },
+
     {
-      name: "leaves",
-      path: "/leaves",
-      element: <MyLeaves />,
+      name: "clocking",
+      path: "/clocking",
+      element: <MyClocking />,
+    },
+    {
+      name: "clocking",
+      path: "/clocking/:id",
+      element: <MyWorker />,
+    },
+    {
+      name: "trafficRange",
+      path: "/trafficRange",
+      element: <MyTraffics />,
+    },
+    {
+      name: "weeklyPlan",
+      path: "/weeklyPlan",
+      element: <MyWeeklyPlan />,
+    },
+    {
+      name: "weeklyPlan",
+      path: "/weeklyPlan/:id",
+      element: <MyWorker />,
+    },
+    {
+      name: "diagram",
+      path: "/diagram",
+      element: <MyDiagram />,
+    },
+    {
+      name: "diagram",
+      path: "/diagram/:id",
+      element: <MyDiagramInfo />,
     },
     {
       name: "assignments",

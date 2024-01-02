@@ -61,7 +61,7 @@ export const AppbottomHead = styled.div`
   align-items: flex-end;
   justify-content: center;
   direction: rtl;
-  height: 50%;
+  // height: 50%;
 `;
 
 export const Tikmentfooter = styled.div`

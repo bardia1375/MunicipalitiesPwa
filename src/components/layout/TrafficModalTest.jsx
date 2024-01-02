@@ -485,68 +485,7 @@ export const TrafficModalTest = ({
           </Dashboard.Collapse>
         )}
         <>
-          {/* <div style={{ display: "flex", flexDirection: "row" }}>
-            <div>{size}bytes</div>
-            {size && (
-              <img
-                style={{ border: "1px solid black" }}
-                src={size}
-                alt="test"
-              />
-            )}
-          </div> */}
-          <SelectedActions>
-            {loading || entryType === "" ? (
-              <Selected left={50}>
-                <LoadingSpinner />
-              </Selected>
-            ) : (
-              <Selected left={50}>
-                {/* {locations.lat} - {locations.long} */}
-                <SelectedItem
-                  // left={61}
-                  disabled={!!locations.error || entryType === "in"}
-                  suggest={entryType === "out"}
-                  type={"enter"}
-                  onClick={() => {
-                    // presentHandler(159);
-                    (!!locations.error || entryType === "out") &&
-                      openCollapse();
-                  }}
-                >
-                  ورود
-                </SelectedItem>
-                <SelectedItem
-                  // left={38}
-                  disabled={!!locations.error || entryType === "out"}
-                  suggest={entryType === "in"}
-                  type={"exit"}
-                  onClick={() => {
-                    // presentHandler(159);
-                    (!!locations.error || entryType === "in") && openCollapse();
-                  }}
-                >
-                  خروج
-                </SelectedItem>
-              </Selected>
-            )}
-            {/* <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "1vw",
-              }}
-            >
-              <img src={LeftArrows} alt="" />
-              <img
-                style={{ marginLeft: "20px" }}
-                width={20}
-                src={FingerPrint}
-                alt=""
-              />
-            </div> */}
-          </SelectedActions>
+          <div>شروع تایمر</div>
         </>
       </Body>
     </>

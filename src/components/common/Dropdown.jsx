@@ -16,6 +16,7 @@ export const Dropdown = ({
   color,
   imageSrc,
   width,
+  justifyContent,
   whiteSpace,
   readOnly,
   borderRadius,
@@ -73,7 +74,12 @@ export const Dropdown = ({
   }, [showDrop]);
 
   return (
-    <StyledDropdown type={type} color={color} ref={ref}>
+    <StyledDropdown
+      type={type}
+      color={color}
+      ref={ref}
+      justifyContent={justifyContent}
+    >
       <Typography size="base" weight="medium" whiteSpace={true}>
         {title}
       </Typography>
@@ -90,7 +96,7 @@ export const Dropdown = ({
           {selected?.Title ? selected?.Title : selected}
         </Typography>
         {showDrop && (
-          <SelectDropdown color={color} type={type} width={width}>
+          <SelectDropdown color={color} type={type} width="100%">
             {dropItems}
           </SelectDropdown>
         )}
@@ -118,6 +124,7 @@ const StyledDropdown = styled.div`
         return css`
           /* width: 100%; */
           display: flex;
+          align-items: center;
           gap: 12px;
           color: ${({ theme, color }) => theme.color[color]};
         `;
@@ -125,7 +132,8 @@ const StyledDropdown = styled.div`
         return css`
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: ${({ justifyContent }) =>
+            justifyContent ? "justifyContent" : "center"};
           gap: 12px;
           color: ${({ theme, color }) => theme.color[color]};
         `;
@@ -174,30 +182,21 @@ const StyledSelect = styled.div`
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 10px;
-          min-width: 45vw;
+          gap: 24px;
+          min-width: 120px;
           width: 100%;
-          padding: 2px 10px;
+          padding: 2px 20px;
           border-radius: ${({ show }) => (show ? "6px 6px 0px 0px" : "6px")};
           border: 1px solid
             ${({ theme, color }) =>
               theme.color[color] ? theme.color[color] : color};
           border: ${({ show }) =>
-            show ? `1px solid ${({ color }) => (color ? color : "red")}` : ""};
+            show
+              ? `1px solid ${({ color }) => (color ? color : "#f5f5f5")}`
+              : ""};
           background: #f5f5f5 0% 0% no-repeat padding-box;
           color: ${({ theme, color }) => theme.color[color]};
           cursor: pointer;
-
-          & > span {
-            font-size: 3.5vw;
-            @media (min-width: 500px) {
-              font-size: 14px;
-            }
-          }
-          @media (min-width: 500px) {
-            font-size: 16px;
-            min-width: 160px;
-          }
 
           img {
             width: 12px;
@@ -205,10 +204,10 @@ const StyledSelect = styled.div`
             transition: 300ms;
           }
 
-          /* @media (min-width: 1100px) {
+          @media (min-width: 1100px) {
             min-width: 180px;
             width: 100%;
-          } */
+          }
         `;
       default:
         return css`
@@ -233,12 +232,12 @@ const StyledSelect = styled.div`
             transition: 300ms;
           }
 
-          /* @media (min-width: 1100px) {
+          @media (min-width: 1100px) {
             width: ${({ width }) => (width ? width : "180px")};
           }
           @media (max-width: 1260px) {
             width: 100%;
-          } */
+          }
         `;
     }
   }}
@@ -280,33 +279,31 @@ const SelectDropdown = styled.div`
           transform: translateX(-50%);
           display: flex;
           flex-direction: column;
-          /* min-width: 160px; */
+          min-width: 120px;
           width: 100%;
           max-height: 200px;
           overflow-y: auto;
           border: 1px solid
             ${({ color, theme }) =>
-              theme.color[color] ? theme.color[color] : color ? color : "red"};
-          /* border: ${({ show }) => (show ? "1px solid red" : "")}; */
+              theme.color[color]
+                ? theme.color[color]
+                : color
+                ? color
+                : " #183573 "};
+          /* border: ${({ show }) => (show ? "1px solid  #f5f5f5 " : "")}; */
           border-radius: 0 0 6px 6px;
-
           background: #f5f5f5 0% 0% no-repeat padding-box;
           & > span {
             border-top: 1px solid #fff;
             padding: 0 20px;
-            /* @media (min-width: 500px) { */
-            font-size: 3.5vw;
-            /* } */
-            @media (min-width: 500px) {
-              font-size: 14px;
-            }
           }
           color: ${({ color }) => (color ? color : "")};
-          /* font-size: smaller; */
-          /* @media (min-width: 1100px) {
+
+          @media (min-width: 1100px) {
             width: 100%;
+            /* min-width: ${({ width }) => (width ? width : "180px")}; */
             min-width: 180px;
-          } */
+          }
         `;
       default:
         return css`

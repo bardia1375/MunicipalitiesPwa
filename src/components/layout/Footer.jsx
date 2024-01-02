@@ -98,7 +98,8 @@ export const Footer = () => {
           ) : trafficModal ? (
             <Arrow width={30} src={Close} alt=""></Arrow>
           ) : (
-            <div>start</div>          )}
+            <h3 style={{ color: "white"}}>شروع</h3>
+          )}
         </Circle>
         {/* <FooterStyles.Footericon src={Telegram} alt="Telegram" /> */}
         <FooterStyles.MessagesBody
@@ -107,7 +108,7 @@ export const Footer = () => {
               ? () => {
                   setTrafficModal(false);
                   setSelected("Message");
-                  navigate("/request");
+                  navigate(-1);
                 }
               : null
           }

@@ -1,21 +1,20 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-const neumorphismMixin = (distance, blur, intensity, inset = false) => css`
-  box-shadow: ${distance} ${distance} ${blur} ${inset ? "inset" : ""}
-      hsl(0, 0%, 35%) inset,
-    ${-distance} ${-distance} ${blur} ${inset ? "inset" : ""} hsl(0, 0%, 100%)
-      inset;
-`;
-
 const CardContainer = styled.div`
+  background: ${(props) => props.color || "#ecfcfc"};
+  border-radius: 30px;
+  padding: 8px 15px;
+  height: ${(props) => (props.height ? props.height : "100%")};
+
   width: 100%;
-  height: 100%;
-  border:5px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 16px;
-  margin: 16px;
-  ${neumorphismMixin("43px", "45px", "100%")};
+  gap: 3vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  margin: ${(props) => (props.margin ? props.margin : "0")};
 `;
 
 const CardImage = styled.img`
@@ -24,6 +23,9 @@ const CardImage = styled.img`
 `;
 
 const CardContent = styled.div`
+  width: 100%;
+  height: 100%;
+
   /* Your content styles go here */
 `;
 
@@ -35,13 +37,22 @@ const CardText = styled.p`
   /* Your text styles go here */
 `;
 
-const Card = ({ title, content, imageUrl }) => {
+const Card = ({
+  title,
+  content,
+  imageUrl,
+  children,
+  color,
+  height,
+  margin,
+}) => {
   return (
-    <CardContainer>
+    <CardContainer color={color} height={height} margin={margin}>
       {imageUrl && <CardImage src={imageUrl} alt="Card" />}
       <CardContent>
         <CardTitle>{title}</CardTitle>
         <CardText>{content}</CardText>
+        {children}
       </CardContent>
     </CardContainer>
   );

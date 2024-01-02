@@ -318,7 +318,6 @@ export const Container = () => {
     ));
   };
 
-
   return (
     <Dashboard.DashboardBody>
       <div
@@ -411,6 +410,28 @@ export const Container = () => {
           <LoadingSpinner />
         ) : (
           <>
+            {/* <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              {selectedTitle === "امروز" ? (
+                <Contor24 dataShow={dayShow} selectedTitle={selectedTitle} />
+              ) : (
+                <Widget
+                  dataShow={
+                    selectedReport === "کارکرد من"
+                      ? monthShow.info[0]
+                      : selectedReport === "مرخصی‌ها"
+                      ? monthShow.info[1]
+                      : null
+                  }
+                  selectedReport={selectedReport}
+                />
+              )}
+            </div> */}
             <NeumorphicBox
               style={{
                 display: "flex",

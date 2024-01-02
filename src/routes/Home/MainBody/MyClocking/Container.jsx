@@ -10,6 +10,7 @@ import { NewReqModal } from "components/layout/NewReqModal";
 import { useRef } from "react";
 import { PeriodModal } from "../../../../assets/styles/layout/modals/PeriodModal";
 import { EditModal } from "../../../../assets/styles/layout/modals/EditModal";
+import DatePicker from "components/common/datePickerMobile/month";
 
 // Style
 import { Traffics } from "assets/styles/home/traffics";
@@ -20,8 +21,9 @@ import myApi from "config/axios";
 import { errorMessage, successMessage } from "services/toast";
 import { DeleteModal } from "components/common/DeleteModal";
 import { DetailModal } from "../MyTraffics/DetailModal";
+import Card from "components/common/Card";
 
-export const MyLeaves = () => {
+export const MyClocking = () => {
   // States && Hooks
   moment.loadPersian({ dialect: "persian-modern" });
   const ref = useRef();
@@ -281,149 +283,9 @@ export const MyLeaves = () => {
         />
       )} */}
       <Traffics.RequestBody style={{ marginTop: "80px" }}>
-        <Traffics.RequestHeader>
-          <Traffics.TitleStyle
-            onClick={() => {
-              if (selectedTitle !== "ترددهای من") {
-                setSelectedTitle("ترددهای من");
-                setDate({});
-                setPage(0);
-                setShowList([]);
-              }
-            }}
-            selected={selectedTitle === "ترددهای من"}
-          >
-            همۀ مرخصی‌ها
-          </Traffics.TitleStyle>
-          <Traffics.TitleStyle
-            onClick={() => {
-              setSelectedTitle("ترددهای انتخابی");
-              setPeriodModal(true);
-              setShowList([]);
-              setPage(0);
-            }}
-            selected={selectedTitle === "ترددهای انتخابی"}
-          >
-            دوره انتخابی
-          </Traffics.TitleStyle>
-        </Traffics.RequestHeader>
-        <Traffics.NewRequest>
-          <div style={{ height: "100%", width: "100%" }}>
-            <Traffics.ListOFRequests>
-              {showList?.length === 0 && !loading ? (
-                <div style={{ textAlign: "center" }}>مرخصی ثبت نشده است.</div>
-              ) : (
-                showList?.map((item, index) => (
-                  <Traffics.RequestCard
-                    deleted={item.deleted_at ? true : false}
-                    key={index}
-                  >
-                    <Traffics.RequestCardInfo
-                      deleted={item.deleted_at ? true : false}
-                    >
-                      <div
-                        style={{ width: "100%" }}
-                        onClick={() => setDetailModal(item)}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            color: `${item.deleted_at ? "white" : "#9c9c9c"}`,
-                            fontWeight: "400",
-                            fontSize: "1.8vh",
-                            alignItems: "center",
-                          }}
-                        >
-                          {`${moment(item.date_from).format("dddd")} - ${moment(
-                            item.date_from
-                          ).format("jYYYY/jMM/jDD")}`}{" "}
-                          -{" "}
-                          {moment(item.time_from, "HH:mm:ss").format(
-                            "HH:mm:ss"
-                          )}
-                        </div>
-                        <Typography
-                          size="base"
-                          color={`${item.deleted_at ? "white" : "grey"}`}
-                        >
-                          {item.entryType}{" "}
-                          <span
-                            style={{
-                              color: `${
-                                item.deleted_at ? "#fafd20" : "#E67205"
-                              }`,
-                              width: "100%",
-                              textAlign: "center",
-                            }}
-                          >
-                            {item.entryCause}
-                          </span>
-                        </Typography>
-                      </div>
-                      <div>
-                        {item.status === "waiting" ? (
-                          <Traffics.RequestCardStatusItem type="waiting">
-                            در انتظار بررسی
-                          </Traffics.RequestCardStatusItem>
-                        ) : null}
-                      </div>
-                      {openOption && openOption === item.id && (
-                        <Traffics.OptionMenu ref={ref}>
-                          {item.deleted_at ? (
-                            <Traffics.OptionItem
-                              onClick={() => setReturnModal(item)}
-                            >
-                              بازگردانی
-                            </Traffics.OptionItem>
-                          ) : (
-                            <>
-                              <Traffics.OptionItem
-                                onClick={() => setDeleteModal(item)}
-                              >
-                                حذف
-                              </Traffics.OptionItem>
-                              <Traffics.OptionItem
-                                style={{
-                                  position: "relative",
-                                }}
-                                onClick={() => {
-                                  setEditModal(item);
-                                }}
-                              >
-                                <div>ویرایش</div>
-                              </Traffics.OptionItem>
-                            </>
-                          )}
-                        </Traffics.OptionMenu>
-                      )}
-                      <Traffics.Option
-                        style={{ padding: "0 5px" }}
-                        onClick={() => optionbHandler(item.id)}
-                      >
-                        ⋮
-                      </Traffics.Option>
-                    </Traffics.RequestCardInfo>
-                  </Traffics.RequestCard>
-                ))
-              )}
-              {amount !== page && !loading && showList.length > 0 && (
-                <div style={{ paddingBottom: "20px", cursor: "pointer" }}>
-                  <Traffics.CustomButton
-                    left="20px"
-                    color="#e98425"
-                    noBackground={true}
-                    border={true}
-                    onClick={increasePage}
-                  >
-                    <>نمایش بیشتر</>
-                    <img src={Arrow} alt="" />
-                  </Traffics.CustomButton>
-                </div>
-              )}
-            </Traffics.ListOFRequests>
-            {loading && <LoadingSpinner />}
-          </div>
-        </Traffics.NewRequest>
+        <Card height="calc(100vh - 250px)" margin="24px 0 0 0">
+          salam
+        </Card>
       </Traffics.RequestBody>
     </div>
   );

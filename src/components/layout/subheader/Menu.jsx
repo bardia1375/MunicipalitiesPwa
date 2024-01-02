@@ -209,21 +209,21 @@ export const Menu = ({ setOpenModal, openModal }) => {
         <div>
           <MenuList>
             <Item onClick={() => clickHandler("/profile")}>
-              <img width={25} src={MyCoworker} alt={"MyCoworker"} /> اطلاعات
-              کاربری
+              <img width={25} src={MyCoworker} alt={"MyCoworker"} />
             </Item>
-            <Item onClick={() => clickHandler("/")}>
-              <img width={25} src={MyTraffic} alt={"MyTraffic"} /> ترددهای من
+            <Item onClick={() => clickHandler("/clocking")}>
+              <img width={25} src={MyTraffic} alt={"MyTraffic"} /> ثبت تردد
             </Item>
-            <Item onClick={() => clickHandler("/leaves")}>
-              <img width={25} src={MyTraffic} alt={"MyTraffic"} /> مرخصی‌‌های من
+            <Item onClick={() => clickHandler("/trafficRange")}>
+              <img width={25} src={MyTraffic} alt={"MyTraffic"} /> محدوده تردد
             </Item>
-            <Item onClick={() => clickHandler("/assignments")}>
-              <img width={25} src={MyTraffic} alt={"MyTraffic"} /> مأموریت‌های
-              من
+            <Item onClick={() => clickHandler("/weeklyPlan")}>
+              <img width={25} src={MyTraffic} alt={"MyTraffic"} />
+              برنامه هفتگی
             </Item>
-            <Item onClick={() => clickHandler("/work-report")}>
-              <img width={25} src={WorkReport} alt={"WorkReport"} /> گزارش کار
+            <Item onClick={() => clickHandler("/diagram")}>
+              <img width={25} src={WorkReport} alt={"WorkReport"} />
+              نمودارها
             </Item>
             {/* <Item>
               <img width={25} src={MyShift} alt={"MyShift"} /> شیفت‌های من

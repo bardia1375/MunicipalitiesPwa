@@ -154,33 +154,38 @@ function StatusCard({
       setLastShow(lastLeaves);
     }
   }, [selectedReport, lastTraffics, lastAssignments, lastLeaves]);
-
   return (
     <Dashboard.StatusTypes>
       <Dashboard.StatusList>
-        {["مرخصی‌ها", "کارکرد من", "مأموریت‌ها","تردد"].map((item, index) => (
+        {[
+          { title: "ثبت تردد", Url: "./clocking" },
+          { title: "محدوده تردد", Url: "./trafficRange" },
+          { title: "نمودارها", Url: "/diagram" },
+          { title: "برنامه هفتگی", Url: "./plan" },
+        ].map((item, index) => (
           <Dashboard.StatusItem
             key={index}
             onClick={() => {
-              setSelectedReport(item);
-              collapse && openCollapse();
-              setDateLoading(true);
-              setTimeout(() => {
-                setDateLoading(false);
-              }, 500);
+              navigate(item.Url);
+              // setSelectedReport(item.title);
+              // collapse && openCollapse();
+              // setDateLoading(true);
+              // setTimeout(() => {
+              //   setDateLoading(false);
+              // }, 500);
             }}
-            selected={selectedReport === item}
+            selected={selectedReport === item.title}
           >
-            {selectedReport === item ? (
+            {selectedReport === item.title ? (
               <img
                 style={{
-                  width: `${item === "کارکرد من" ? "6vw" : "30px"}`,
-                  maxWidth: `${item === "کارکرد من" ? "28px" : "30px"}`,
+                  width: `${item.title === "کارکرد من" ? "6vw" : "30px"}`,
+                  maxWidth: `${item.title === "کارکرد من" ? "28px" : "30px"}`,
                 }}
                 src={
-                  item === "مرخصی‌ها"
+                  item.title === "ثبت تردد"
                     ? SelectedLeave
-                    : item === "مأموریت‌ها"
+                    : item.title === "محدوده تردد"
                     ? SelectedMission
                     : SelectedWorkout
                 }
@@ -189,20 +194,20 @@ function StatusCard({
             ) : (
               <img
                 style={{
-                  width: `${item === "کارکرد من" ? "6vw" : "8vw"}`,
-                  maxWidth: `${item === "کارکرد من" ? "28px" : "30px"}`,
+                  width: `${item.title === "کارکرد من" ? "6vw" : "8vw"}`,
+                  maxWidth: `${item.title === "کارکرد من" ? "28px" : "30px"}`,
                 }}
                 src={
-                  item === "مرخصی‌ها"
+                  item.title === "ثبت تردد"
                     ? Leave
-                    : item === "مأموریت‌ها"
+                    : item.title === "محدوده تردد"
                     ? Mission
                     : Workout
                 }
                 alt=""
               />
             )}
-            {item}
+            {item.title}
           </Dashboard.StatusItem>
         ))}
       </Dashboard.StatusList>

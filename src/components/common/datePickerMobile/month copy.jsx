@@ -19,7 +19,6 @@ import LeftArrow from "assets/images/common/arrows/white-left.svg";
 import { Field } from "../Field";
 import { useRef } from "react";
 import { ModalPicker } from "../datePickerMobile/modalPicker";
-import { ModalPickerCopy } from "./modalPickerCopy";
 
 const DatePicker = ({ value, label, placeHolder, onChange, error }) => {
   const [mode, setMode] = useState(false);
@@ -179,11 +178,29 @@ const DatePicker = ({ value, label, placeHolder, onChange, error }) => {
   const startOfMonthDay = Calendar(year, month, 1).getDayNumber() + 1;
 
   return (
-    <ModalPickerCopy
-      setMode={setMode}
-      mode={mode}
-      onChange={inputChangeHandler}
-    />
+    <div style={{ position: "relative" }} ref={ref}>
+      {mode && (
+        <ModalPicker
+          setMode={setMode}
+          mode={mode}
+          onChange={inputChangeHandler}
+        />
+      )}
+      {!mode && (
+        <Field
+          onClick={modeHandler}
+          placeholderTextAlign={"center"}
+          value={selectedDay}
+          placeHolder={placeHolder}
+          name={"Day"}
+          label={label}
+          // color="darkGray"
+          borderColor={error}
+          type={"text"}
+          autoComplete="off"
+        />
+      )}
+    </div>
   );
 };
 

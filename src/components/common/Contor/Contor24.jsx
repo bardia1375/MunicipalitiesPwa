@@ -52,9 +52,6 @@ function Contor24({ selectedTitle, dataShow }) {
   const converter = (x) => {
     return (x * 100) / 60;
   };
-  const changeTimeFormat = (time) => {
-    return parseInt(time?.split(":")[0]) + converter(time?.split(":")[1]) / 100;
-  };
 
   // Check for counter to be in correct position
   useEffect(() => {
@@ -84,158 +81,59 @@ function Contor24({ selectedTitle, dataShow }) {
       counter++;
     }
   };
+  const [minutes, setMinutes] = useState(0);
+  const [hover, setHover] = useState(0);
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setMinutes((prev) => prev + 1);
+
+  //     if (minutes === 59) {
+  //       setMinutes(0);
+  //       setHover((prev) => prev + 1);
+  //     }
+
+  //     if (hover === 23) {
+  //       setHover(0);
+  //     }
+  //   }, 1000);
+
+  //   // Cleanup the interval on component unmount
+  //   return () => clearInterval(intervalId);
+  // }, [minutes, hover]);
 
   return (
     <ContorBody>
-      {Array.from({ length: 24 }, (_, i) => i + 1).map((item) => (
-        <Number key={item} degree={15 * item}>
-          <div>{item}</div>
-        </Number>
-      ))}
-      <InnerBody>
-        {dataShow?.countor.items.map((item) => {
-          return getRange(
-            changeTimeFormat(item.from),
-            changeTimeFormat(item.to),
-            item.style === "dash" ? 1 : 3
-          ).map((range, index) => (
-            <FillUp key={index} degree={range}>
-              <div
-                onClick={() => changeModeHandler(item.item, item.from)}
-                style={{
-                  borderLeft: `${item.style === "dash" ? "5px" : "2px"} solid ${
-                    item.color
-                  }`,
-                  height: "15px",
-                  padding: "1px",
-                  zIndex: `${
-                    item.item === selectedMode.item &&
-                    item.from === selectedMode.from
-                      ? "5"
-                      : "1"
-                  }`,
-                  position: "absolute",
-                  top: `20px`,
-                  scale: `${
-                    item.item === selectedMode.item &&
-                    item.from === selectedMode.from
-                      ? 1.2
-                      : 1
-                  }`,
-                  boxShadow: `${
-                    item.item === selectedMode.item &&
-                    item.from === selectedMode.from
-                      ? "2px 0px 6px #00000033"
-                      : "none"
-                  }`,
-                }}
-              ></div>
-            </FillUp>
-          ));
-        })}
-        {dataShow?.countor?.working_hours.map((item) => {
-          return getRange(
-            changeTimeFormat(item.from),
-            changeTimeFormat(item.to),
-            item.style !== "dash" ? 1 : 3
-          )?.map((range, index) => (
-            <FillUp cursor={"off"} key={index} degree={range}>
-              <div
-                style={{
-                  borderLeft: `${item.style === "dash" ? "2px" : "5px"} solid ${
-                    item.color
-                  }`,
-                  padding: "1px",
-                  position: "absolute",
-                  // top: `${180 <= range && range <= 540 ? 0 : "20px"}`,
-                  height: "15px",
-                }}
-              ></div>
-            </FillUp>
-          ));
-        })}
-        <TotalTime
-          onClick={dataShow?.countor.items.length === 0 ? null : autoChange}
-        >
-          {dataShow?.countor.items.length === 0 || !dataShow ? (
-            <div style={{ textAlign: "center", color: "grey" }}>
-              <div>اطلاعاتی جهت نمایش وجود ندارد!</div>
-            </div>
-          ) : (
+      <TotalTime
+        onClick={dataShow?.countor.items.length === 0 ? null : autoChange}
+      >
+        {dataShow?.countor.items.length === 0 || !dataShow ? (
+          <div style={{ textAlign: "center", color: "grey" }}>
+            <div> تایمر خاموش است!</div>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              textAlign: "center",
+              // width: "100%",
+            }}
+          >
+            <div>{<div>{`${hover}:${minutes}`}</div>}</div>
             <div
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                textAlign: "center",
-                // width: "100%",
+                borderBottom: "1px solid #c8c8c8",
+                width: "100%",
+                // maxWidth: "100%",
               }}
-            >
-              <div>
-                {
-                  dataShow?.countor.items.filter(
-                    (item) =>
-                      item.item === selectedMode.item &&
-                      item.from === selectedMode.from
-                  )[0]?.value
-                }
-              </div>
-              <div
-                style={{
-                  borderBottom: "1px solid #c8c8c8",
-                  width: "100%",
-                  // maxWidth: "100%",
-                }}
-              />
-              <Tooltip style={{ color: "#c8c8c8" }}>
-                {dataShow?.countor.items.filter(
-                  (item) =>
-                    item.item === selectedMode.item &&
-                    item.from === selectedMode.from
-                )[0]?.item === null ? (
-                  <></>
-                ) : (
-                  <>
-                    {dataShow?.countor.items.filter(
-                      (item) =>
-                        item.item === selectedMode.item &&
-                        item.from === selectedMode.from
-                    )[0]?.item.length > 15 && (
-                      <TooltipText>
-                        {
-                          dataShow?.countor.items.filter(
-                            (item) =>
-                              item.item === selectedMode.item &&
-                              item.from === selectedMode.from
-                          )[0]?.item
-                        }
-                      </TooltipText>
-                    )}
-                    {dataShow?.countor.items.filter(
-                      (item) =>
-                        item.item === selectedMode.item &&
-                        item.from === selectedMode.from
-                    )[0]?.item.length > 15
-                      ? `${dataShow?.countor.items
-                          .filter(
-                            (item) =>
-                              item.item === selectedMode.item &&
-                              item.from === selectedMode.from
-                          )[0]
-                          ?.item.slice(0, 15)} . . .`
-                      : dataShow?.countor.items.filter(
-                          (item) =>
-                            item.item === selectedMode.item &&
-                            item.from === selectedMode.from
-                        )[0]?.item}
-                  </>
-                )}
-              </Tooltip>
-            </div>
-          )}
-        </TotalTime>
-      </InnerBody>
+            />
+            <Tooltip style={{ color: "#c8c8c8" }}>تایمر</Tooltip>
+          </div>
+        )}
+      </TotalTime>
     </ContorBody>
   );
 }
