@@ -1,9 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  Polyline,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import styled from "styled-components";
 import { Button } from "components/common";
+import SearchImg from "../../../../assets/images/map/search.png";
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import MarkerClusterGroup from "react-leaflet-markercluster";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -26,13 +38,17 @@ const CircularMarker = styled.div`
 `;
 
 function MapComponent({ userLocation }) {
+  const mapRef = useRef(null); // Ref to store the map instance
+
   const [positions, setPositions] = useState([
+    [35.7561957, 51.355828],
     [35.7361957, 51.425828], // Example coordinates for Point 1
     [35.732298, 51.429343], // Example coordinates for Point 2
     [35.735298, 51.435343], // Example coordinates for Point 3
     [35.732298, 51.449343], // Example coordinates for Point 2
     [35.735298, 51.445343], // Example coordinates for Point 3
   ]);
+  const [positionSearch, setPositionSearch] = useState(positions[0]);
   const LocateControl = () => {
     const map = useMap();
 
@@ -96,12 +112,113 @@ function MapComponent({ userLocation }) {
   //   );
   // }, []); // Empty dependency array ensures the effect runs only once
   console.log("userLocation", userLocation);
+  const polyline = [
+    [35.7561957, 51.355828],
+    [35.7471957, 51.355828],
+    [35.7351957, 51.355828],
+    [35.7351957, 51.368828],
+    [35.7351957, 51.388828],
+    [35.7361957, 51.425828], // Example coordinates for Point 1
+    [35.732298, 51.429343], // Example coordinates for Point 2
+    [35.735298, 51.435343], // Example coordinates for Point 3
+    [35.732298, 51.449343], // Example coordinates for Point 2
+    [35.735298, 51.445343], // Example coordinates for Point 3
+  ];
+  const limeOptions = { color: "lime" };
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchLocation = async () => {
+    // Use geocoding to get the coordinates of the location
+    const provider = new OpenStreetMapProvider();
+    const queryWithCity = `${searchTerm}, Tehran, Iran`; // Add Tehran and Iran to the query
+    const results = await provider.search({ query: queryWithCity });
+    console.log("searchTerm", searchTerm);
+    console.log("results", results);
+    console.log("provider", provider);
+    if (results.length > 0) {
+      const { y, x } = results[0];
+      setPositionSearch([y, x]);
+      console.log("y,x", y, x);
+      // this.setState({ position: [y, x], zoom: 15, hasLocation: true });
+    } else {
+      console.log("Location not found");
+      // You can handle the case where the location is not found
+    }
+  };
+  const handleSearchChange = (event) => {
+    console.log("event.target.value", event.target.value);
+    setSearchTerm(event.target.value);
+  };
+  const handleSearchSubmit = async () => {
+    await searchLocation();
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent form submission
+      searchLocation();
+    }
+  };
+  useEffect(() => {
+    if (mapRef.current && positionSearch) {
+      mapRef.current.flyTo(positionSearch, 16); // Example zoom level
+    }
+  }, [positionSearch]);
+
   return (
     <MapContainer
-      center={positions[0]}
+      center={positionSearch}
       zoom={userLocation ? 15 : 13}
-      style={{ height: "30vh", width: "100%", zIndex: 1 }}
+      style={{ height: "50vh", width: "100%", zIndex: 1 }}
+      whenCreated={(mapInstance) => {
+        mapRef.current = mapInstance;
+      }} // Callback to store map instance
     >
+      <div
+        style={{
+          position: "absolute",
+          top: "8px",
+          zIndex: "1000",
+          right: "16px",
+        }}
+      >
+        <div style={{ position: "relative" }}>
+          <input
+            type="text"
+            placeholder="جستجو موقعیت مکانی"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{
+              borderRadius: "16px 16px 0 0",
+              borderBottom: "1px solid #dadce0",
+              boxShadow: "0 0 2px rgb(0 0 0/20%), 0 -1px 0 rgb(0 0 0/2%)",
+              background: "#fff",
+              border: "none",
+              width: "16vw",
+              minWidth: "80px",
+              maxWidth: "150px",
+              height: "28px",
+              outline: "none",
+              padding: "8px",
+            }}
+            onKeyDown={handleKeyDown}
+          />
+          <img
+            onClick={handleSearchSubmit}
+            style={{
+              position: "absolute",
+              width: "24px",
+              height: "24px",
+              left: "10px",
+              top: "10px",
+              cursor: "pointer",
+            }}
+            src={SearchImg}
+            alt="Search"
+          />
+        </div>
+        {/* <button onClick={this.handleSearchSubmit}>Search</button> */}
+      </div>
+      <Polyline pathOptions={limeOptions} positions={polyline} />
+
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -132,6 +249,13 @@ function MapComponent({ userLocation }) {
           </Popup>
         </Marker>
       )}
+      <MarkerClusterGroup>
+        {positions.map((position, index) => (
+          <Marker key={index} position={position}>
+            <Popup>{/* ... your popup content ... */}</Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
       <LocateControl />
     </MapContainer>
   );
