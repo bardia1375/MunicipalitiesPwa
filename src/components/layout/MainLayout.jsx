@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 
 export const MainLayout = ({ children }) => {
   const location = useLocation();
+  
   return (
     <MainStyles.Container flex={location.pathname.length === 1}>
       {/* <Header /> */}

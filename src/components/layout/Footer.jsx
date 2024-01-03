@@ -19,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import { TrafficModalTest } from "./TrafficModalTest";
 import LoadingSpinner from "components/common/publicTable/loading/LoadingSpinner";
 import moment from "moment-jalaali";
+import { successMessage } from "services/toast";
 
 export const Footer = () => {
   const location = useLocation();
@@ -38,16 +39,19 @@ export const Footer = () => {
   }, [location.pathname]);
 
   const [locations, setLocations] = useState({});
-  const[startTime,setStartTime]=useState("")
-  const[endTime,setEndTime]=useState("")
-  const trafficModalController = () => {
-    if (trafficModal) {
-      setEndTime(moment().format("HH:mm:ss"))
-      console.log("endTime", endTime);
-      setTrafficModal(false);
-      const timeDifferenceInMinutes = endTime.diff(startTime, "minutes");
-      console.log("timeDifferenceInMinutes", timeDifferenceInMinutes);
+  const [startTime, setStartTime] = useState(moment().format("HH:mm"));
+  const [endTime, setEndTime] = useState(moment().format("HH:mm"));
 
+  const trafficModalController = (date) => {
+    if (trafficModal) {
+      const end = date;
+      setEndTime(end);
+      successMessage("زمان شما با موفقیت متوقف شد.");
+      setTrafficModal(false);
+      localStorage.setItem("endTime", moment().format("HH:mm"));
+
+      // const timeDifferenceInMinutes = endTime.diff(startTime, "minutes");
+      // console.log("timeDifferenceInMinutes", timeDifferenceInMinutes);
     } else {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -62,11 +66,48 @@ export const Footer = () => {
           });
         }
       );
-      setStartTime(moment().format("HH:mm:ss"))
-      console.log("startTime", startTime)
+      setStartTime(moment().format("HH:mm"));
+      console.log("startTime", startTime);
+      localStorage.setItem("startTime", moment().format("HH:mm"));
+      successMessage("زمان شما از همین لحظه شروع شد.");
       setTrafficModal(true);
     }
   };
+  useEffect(() => {
+    const start = localStorage.getItem("startTime");
+    const end = localStorage.getItem("endTime");
+    const getMinutesSinceMidnight = (time) => {
+      if (time) {
+        const [hours, minutes] = time?.split(":").map(Number);
+        return hours * 60 + minutes;
+      }
+    };
+    console.log("endMinutesend", end);
+
+    const startMinutes = getMinutesSinceMidnight(start);
+    const endMinutes = getMinutesSinceMidnight(end);
+    console.log("startMinutes", startMinutes);
+    console.log("endMinutes", endMinutes);
+    const timeDifferenceMinutes = endMinutes - startMinutes;
+
+    // Calculate hours and remaining minutes
+    const hours = Math.floor(timeDifferenceMinutes / 60);
+    const remainingMinutes = timeDifferenceMinutes % 60;
+
+    console.log("Time difference in minutes:", timeDifferenceMinutes);
+    console.log(
+      "Time difference in hours and minutes:",
+      `${hours} hours and ${remainingMinutes} minutes`
+    );
+    // // Compare start and end times
+    // if (startMinutes < endMinutes || startMinutes == endMinutes) {
+    //   // Do something when start time is greater than end time
+    //   console.log("End time is greater than end time");
+    // } else {
+    //   return;
+    // }
+    // console.log(start, end);
+  }, [endTime, startTime]);
 
   return (
     <FooterStyles.AppbottomHead>
@@ -100,7 +141,11 @@ export const Footer = () => {
 
         <Circle
           trafficModal={trafficModal}
-          onClick={loadingCheck ? null : trafficModalController}
+          onClick={
+            loadingCheck
+              ? null
+              : () => trafficModalController(moment().format("HH:mm:ss"))
+          }
         >
           {loadingCheck ? (
             <LoadingSpinner />
