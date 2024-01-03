@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { TrafficModalTest } from "./TrafficModalTest";
 import LoadingSpinner from "components/common/publicTable/loading/LoadingSpinner";
+import moment from "moment-jalaali";
 
 export const Footer = () => {
   const location = useLocation();
@@ -37,10 +38,16 @@ export const Footer = () => {
   }, [location.pathname]);
 
   const [locations, setLocations] = useState({});
-
+  const[startTime,setStartTime]=useState("")
+  const[endTime,setEndTime]=useState("")
   const trafficModalController = () => {
     if (trafficModal) {
+      setEndTime(moment().format("HH:mm:ss"))
+      console.log("endTime", endTime);
       setTrafficModal(false);
+      const timeDifferenceInMinutes = endTime.diff(startTime, "minutes");
+      console.log("timeDifferenceInMinutes", timeDifferenceInMinutes);
+
     } else {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -55,6 +62,8 @@ export const Footer = () => {
           });
         }
       );
+      setStartTime(moment().format("HH:mm:ss"))
+      console.log("startTime", startTime)
       setTrafficModal(true);
     }
   };
@@ -96,9 +105,9 @@ export const Footer = () => {
           {loadingCheck ? (
             <LoadingSpinner />
           ) : trafficModal ? (
-            <Arrow width={30} src={Close} alt=""></Arrow>
+            <h3 style={{ color: "white" }}>پایان</h3>
           ) : (
-            <h3 style={{ color: "white"}}>شروع</h3>
+            <h3 style={{ color: "white" }}>شروع</h3>
           )}
         </Circle>
         {/* <FooterStyles.Footericon src={Telegram} alt="Telegram" /> */}

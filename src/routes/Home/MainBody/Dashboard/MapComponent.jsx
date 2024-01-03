@@ -41,12 +41,13 @@ function MapComponent({ userLocation }) {
   const mapRef = useRef(null); // Ref to store the map instance
 
   const [positions, setPositions] = useState([
-    [35.7561957, 51.355828],
-    [35.7361957, 51.425828], // Example coordinates for Point 1
-    [35.732298, 51.429343], // Example coordinates for Point 2
-    [35.735298, 51.435343], // Example coordinates for Point 3
-    [35.732298, 51.449343], // Example coordinates for Point 2
-    [35.735298, 51.445343], // Example coordinates for Point 3
+    [35.739282, 51.429821], // Example coordinates for Point 1
+    [35.735171, 51.430122], // Example coordinates for Point 1
+    [35.730887, 51.433729], // Example coordinates for Point 1
+    [35.738829, 51.446269], // Example coordinates for Point 2
+    [35.738829, 51.446269], // Example coordinates for Point 3
+    [35.724441, 51.435484], // Example coordinates for Point 2
+    [35.730259, 51.427067], // Example coordinates for Point 3
   ]);
   const [positionSearch, setPositionSearch] = useState(positions[0]);
   const LocateControl = () => {
@@ -113,16 +114,21 @@ function MapComponent({ userLocation }) {
   // }, []); // Empty dependency array ensures the effect runs only once
   console.log("userLocation", userLocation);
   const polyline = [
-    [35.7561957, 51.355828],
-    [35.7471957, 51.355828],
-    [35.7351957, 51.355828],
-    [35.7351957, 51.368828],
-    [35.7351957, 51.388828],
-    [35.7361957, 51.425828], // Example coordinates for Point 1
-    [35.732298, 51.429343], // Example coordinates for Point 2
-    [35.735298, 51.435343], // Example coordinates for Point 3
-    [35.732298, 51.449343], // Example coordinates for Point 2
-    [35.735298, 51.445343], // Example coordinates for Point 3
+    [35.739282, 51.429821], // Example coordinates for Point 1
+    [35.735171, 51.430122], // Example coordinates for Point 2
+    [35.730956, 51.430423], // Example coordinates for Point 3
+    [35.730852, 51.431883], // Example coordinates for Point 2
+    [35.730887, 51.433729], // Example coordinates for Point 3
+    [35.731061, 51.435876], // Example coordinates for Point 3
+    [35.728274, 51.43622], // Example coordinates for Point 3
+    [35.727124, 51.436435], // Example coordinates for Point 3
+    [35.731026, 51.438625], // Example coordinates for Point 3
+    [35.738794, 51.444165], // Example coordinates for Point 3
+    [35.738829, 51.446269], // Example coordinates for Point 3
+    [35.727751, 51.445189], // Example coordinates for Point 3
+    [35.724441, 51.435484], // Example coordinates for Point 3
+    [35.724197, 51.428012], // Example coordinates for Point 3
+    [35.730259, 51.427067], // Example coordinates for Point 3
   ];
   const limeOptions = { color: "lime" };
   const [searchTerm, setSearchTerm] = useState("");
@@ -162,15 +168,21 @@ function MapComponent({ userLocation }) {
       mapRef.current.flyTo(positionSearch, 16); // Example zoom level
     }
   }, [positionSearch]);
-
+  const handleMapClick = (e) => {
+    const { lat, lng } = e.latlng;
+    setPositionSearch([lat, lng]);
+    // You can do more with the clicked coordinates if needed
+    console.log("Clicked on map:", lat, lng);
+  };
   return (
     <MapContainer
       center={positionSearch}
       zoom={userLocation ? 15 : 13}
-      style={{ height: "50vh", width: "100%", zIndex: 1 }}
+      style={{ height: "30vh", width: "100%", zIndex: 1 }}
       whenCreated={(mapInstance) => {
         mapRef.current = mapInstance;
       }} // Callback to store map instance
+      onClick={(e) => handleMapClick(e)} // Attach the click event handler
     >
       <div
         style={{
@@ -223,7 +235,7 @@ function MapComponent({ userLocation }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {positions.map((position, index) => (
+      {/* {positions.map((position, index) => (
         <Marker key={index} position={position}>
           <Popup>
             <div style={{ textAlign: "center" }}>
@@ -237,7 +249,7 @@ function MapComponent({ userLocation }) {
             </div>
           </Popup>
         </Marker>
-      ))}
+      ))} */}
       {userLocation && (
         <Marker position={userLocation} icon={blueDotIcon}>
           <Popup>
@@ -252,7 +264,17 @@ function MapComponent({ userLocation }) {
       <MarkerClusterGroup>
         {positions.map((position, index) => (
           <Marker key={index} position={position}>
-            <Popup>{/* ... your popup content ... */}</Popup>
+            <Popup>
+              <div style={{ textAlign: "center" }}>
+                <CircularMarker>
+                  <img
+                    src={require("../../../../assets/images/profilephoto/302321278.jpg")}
+                    alt={`Point ${index + 1}`}
+                  />
+                </CircularMarker>
+                <div>جواد مقبلی</div>
+              </div>
+            </Popup>
           </Marker>
         ))}
       </MarkerClusterGroup>

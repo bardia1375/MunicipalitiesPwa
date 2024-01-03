@@ -93,77 +93,79 @@ export const MyDiagramInfo = () => {
   ];
 
   return (
-    <Card height="calc(100vh - 250px)" margin="24px 0 0 0">
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-          gap: "16px",
-        }}
-      >
-        <Dropdown
-          type={"عمومی"}
-          title={"انتخاب وضعیت"}
-          firstData={"انتخاب کنید"}
-          setSelectedState={setSelectedState}
-          dropData={[
-            { id: 0, Title: "حضور" },
-            { id: 1, Title: "مرخصی" },
-            { id: 2, Title: "ماموریت" },
-            { id: 3, Title: "غیبت" },
-          ]}
-        />
+    <div>
+      <Card height="calc(100vh - 250px)" margin="24px 0 0 0">
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr ",
-            gap: "8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            gap: "16px",
           }}
         >
-          {Personels.map((Personel) => (
-            <Card color="#def0f2">
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  // background: "rgb(0, 227, 150)",
-                }}
-              >
+          <Dropdown
+            type={"عمومی"}
+            title={"انتخاب وضعیت"}
+            firstData={"انتخاب کنید"}
+            setSelectedState={setSelectedState}
+            dropData={[
+              { id: 0, Title: "حضور" },
+              { id: 1, Title: "مرخصی" },
+              { id: 2, Title: "ماموریت" },
+              { id: 3, Title: "غیبت" },
+            ]}
+          />
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr ",
+              gap: "8px",
+            }}
+          >
+            {Personels.map((Personel) => (
+              <Card color="#def0f2">
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexDirection: "column",
+                    gap: "8px",
+                    // background: "rgb(0, 227, 150)",
                   }}
                 >
-                  <img
-                    src={profile}
-                    width="50px"
-                    height="50px"
-                    style={{
-                      borderRadius: "50%",
-                    }}
-                  />
-
                   <div
                     style={{
-                      textAlign: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
                     }}
                   >
-                    <h4>{Personel.name}</h4>
-                    <p>کدپرسنلی: {Personel.Code} </p>
+                    <img
+                      src={profile}
+                      width="50px"
+                      height="50px"
+                      style={{
+                        borderRadius: "50%",
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      <h4>{Personel.name}</h4>
+                      <p>کدپرسنلی: {Personel.Code} </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>{" "}
+    </div>
   );
 };
