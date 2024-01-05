@@ -34,6 +34,12 @@ const routes = {
       element: <MyTraffics />,
     },
 
+    // {
+    //   name: "clocking",
+    //   path: "/clocking",
+    //   element: <MyClocking />,
+    // },
+
     {
       name: "clocking",
       path: "/clocking",

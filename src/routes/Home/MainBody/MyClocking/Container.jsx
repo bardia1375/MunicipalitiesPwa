@@ -22,34 +22,22 @@ import { errorMessage, successMessage } from "services/toast";
 import { DeleteModal } from "components/common/DeleteModal";
 import { DetailModal } from "../MyTraffics/DetailModal";
 import Card from "components/common/Card";
+import { TrafficModalTest } from "components/layout/TrafficModalTest";
+import styled  from "styled-components";
 
 export const MyClocking = () => {
   // States && Hooks
   moment.loadPersian({ dialect: "persian-modern" });
   const ref = useRef();
-  const [selectedTitle, setSelectedTitle] = useState("ترددهای من");
-  const { Token, Traffic } = useSelector((state) => state.auth);
-  const [requestList, setRequestList] = useState([]);
-  const [showList, setShowList] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const [amount, setAmount] = useState(0);
-  const [requestModal, setRequestModal] = useState(false);
-  const [openOption, setOpenOption] = useState("");
-  const [editModal, setEditModal] = useState(null);
-  const [periodModal, setPeriodModal] = useState(false);
-  const [types, setTypes] = useState(null);
-  const [deleteModal, setDeleteModal] = useState(null);
-  const [returnModal, setReturnModal] = useState(null);
-  const [detailModal, setDetailModal] = useState(null);
-  const info = JSON.parse(localStorage.getItem("personsData"));
-  const [date, setDate] = useState({
-    // from: moment(moment().format("jYYYY/jMM/01"), "jYYYY/jMM/jDD").format(
-    //   "YYYY-MM-DD"
-    // ),
-    // to: moment().format("YYYY-MM-DD"),
-  });
 
+  const info = JSON.parse(localStorage.getItem("personsData"));
+  const [trafficModal, setTrafficModal] = useState(true);
+  const [loadingCheck, setLoadingCheck] = useState(false);
+  const [locations, setLocations] = useState({});
+  const [takeImage,setTakeImage]=useState("")
   // Getting types from api
   // useEffect(() => {
   //   myApi
@@ -63,217 +51,144 @@ export const MyClocking = () => {
   //     });
   // }, []);
 
-  // Fetch data from api
-  useEffect(() => {
-    setLoading(true);
-    myApi
-      .get(`/v1/Types`, {
-        headers: {
-          Authorization: `Bearer ${Token}`,
-        },
-      })
-      .then((res) => {
-        setTypes(res.data.data.types);
-        myApi
-          .get(
-            `/v1/MobileApp/GetMyLeave?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=10&page=0`,
-            {
-              headers: {
-                Authorization: `Bearer ${Token}`,
-              },
-            }
-          )
-          .then((res) => {
-            setAmount(res.data.meta.total_pages - 1);
-            setRequestList(res.data.data);
-            setLoading(false);
-          });
-      });
-  }, [Traffic]);
-  // }, [Traffic, editModal, returnModal, deleteModal]);
 
-  // Control pagination
-  useEffect(() => {
-    if (page > 0) {
-      setLoading(true);
-      if (!!date.from) {
-        myApi
-          .get(
-            `/v1/MobileApp/GetMyLeave?filter_groups[0][filters][1][key]=datetime&filter_groups[0][filters][1][value][0]=${date.from} 00:00:00&filter_groups[0][filters][1][value][1]=${date.to} 23:59:59&filter_groups[0][filters][1][operator]=bt&sort[0][key]=datetime&sort[0][direction]=DESC&limit=10&page=${page}`,
-            {
-              headers: {
-                Authorization: `Bearer ${Token}`,
-              },
-            }
-          )
-          .then((res) => {
-            setAmount(res.data.meta.total_pages - 1);
-            setRequestList([...requestList, ...res.data.data]);
-            setLoading(false);
-          });
-      } else {
-        myApi
-          .get(
-            `/v1/MobileApp/GetMyLeave?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=10&page=${page}`,
-            {
-              headers: {
-                Authorization: `Bearer ${Token}`,
-              },
-            }
-          )
-          .then((res) => {
-            setAmount(res.data.meta.total_pages - 1);
-            setRequestList([...requestList, ...res.data.data]);
-            setLoading(false);
-          });
-      }
-    }
-  }, [page]);
-
-  // Setting data shown
-  useEffect(() => {
-    setLoading(true);
-    setTraffic(true);
-    if (requestList.length > 0 && types) {
-      let list = requestList.map((item) => {
-        return {
-          id: item.id,
-          date_from: item.date_from,
-          date_to: item.date_to,
-          time_from: item.time_from,
-          time_to: item.time_to,
-          // entryType: types?.filter((x) => x.id === item.type_id)[0].full_label,
-          entryCause: types?.filter((x) => x.id === item.type_id)[0].full_label,
-          status: item.status,
-          deleted_at: item.deleted_at,
-        };
-      });
-      setLoading(false);
-      setTraffic(false);
-      setShowList(list);
-    } else if (requestList.length === 0) {
-      setLoading(false);
-      setTraffic(false);
-      setShowList([]);
-    }
-  }, [requestList]);
 
   // Increasing page by one
   const increasePage = () => {
     setPage(page + 1);
   };
 
-  // Option handler for each card
-  const optionbHandler = (id) => {
-    if (openOption === id) {
-      setOpenOption("");
+useEffect(()=>{
+  setLoading(true)
+
+setTimeout(() => {
+  setLoading(false)
+}, 5000);
+},[takeImage])
+  const trafficModalController = () => {
+    if (trafficModal) {
+      setTrafficModal(false);
     } else {
-      setOpenOption(id);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocations({
+            lat: position.coords.latitude,
+            long: position.coords.longitude,
+          });
+        },
+        (error) => {
+          setLocations({
+            error: "دسترسی به موقعیت مکانی شما امکان پذیر نیست.",
+          });
+        }
+      );
+      setTrafficModal(true);
     }
   };
-
-  // Auto close functionality for option
-  useEffect(() => {
-    const closeDropDown = (e) => {
-      if (ref.current && !ref.current.contains(e.target) && openOption) {
-        setOpenOption(false);
-      }
-    };
-    document.body.addEventListener("click", closeDropDown);
-    return () => document.body.removeEventListener("click", closeDropDown);
-  }, [openOption]);
-
-  // Getting data from api with selected title
-  useEffect(() => {
-    setLoading(true);
-    if (!!date.from) {
-      myApi
-        .get(
-          `/v1/MobileApp/GetMyLeave?filter_groups[0][filters][1][key]=datetime&filter_groups[0][filters][1][value][0]=${date.from} 00:00:00&filter_groups[0][filters][1][value][1]=${date.to} 23:59:59&filter_groups[0][filters][1][operator]=bt&sort[0][key]=datetime&sort[0][direction]=DESC&limit=10&page=0`,
-          {
-            headers: {
-              Authorization: `Bearer ${Token}`,
-            },
-          }
-        )
-        .then((res) => {
-          setAmount(res.data.meta.total_pages - 1);
-          setPage(0);
-          setRequestList(res.data.data);
-          setLoading(false);
-        });
-    } else if (selectedTitle === "ترددهای من") {
-      myApi
-        .get(
-          `/v1/MobileApp/GetMyLeave?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=10&page=0`,
-          {
-            headers: {
-              Authorization: `Bearer ${Token}`,
-            },
-          }
-        )
-        .then((res) => {
-          setAmount(res.data.meta.total_pages - 1);
-          setPage(0);
-          setRequestList(res.data.data);
-          setLoading(false);
-        });
-    }
-  }, [date, selectedTitle, editModal, returnModal, deleteModal]);
-
-  // Delete traffic api call
-  const fetchDeleteData = (id) => {
-    myApi
-      .delete(
-        `/V1/Ta/Writs/${id}`,
-        // {
-        //   Id: id,
-        // },
-        {
-          headers: {
-            Authorization: `Bearer ${Token}`,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.code === 200) {
-          successMessage(res.data.message);
-        } else {
-          errorMessage(res.data.data.notice.message);
-        }
-        setDeleteModal(null);
-      });
-  };
-
+console.log("takeImage",takeImage);
+  // const presentHandler = (type=159, imageUrl) => {
+  //   if (!!locations.error) {
+  //     console.log("Location Error! :(");
+  //   } else {
+  //     if (
+  //       !permission &&
+  //       !image &&
+  //       codeList.some((x) => x === info.CompanyCode)
+  //     ) {
+  //       setPermission(true);
+  //       setCameraButton(true);
+  //       setTypeKind(type);
+  //     } else {
+  //       let entryTypes = entryType === "in" ? "out" : "in";
+  //       setLoading(true);
+  //       loader(true);
+  //       axios
+  //         .get(
+  //           `${api.api}/v1/ta/clockings?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=1&page=0`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         )
+  //         .then((res) => {
+  //           if (
+  //             res.data.data.clockings[0].datetime.split(" ")[1] ===
+  //             jMoment().format("HH:mm:00")
+  //           ) {
+  //             errorMessage("!لطفا یک دقیقه منتظر بمانید");
+  //             setImage(null);
+  //             setLoading(false);
+  //             loader(false);
+  //           } else {
+  //             dispatch(setTraffic(true));
+  //             axios
+  //               .post(
+  //                 `${api.api}/v1/ta/clockings`,
+  //                 {
+  //                   clocking: {
+  //                     latitude: locations.lat,
+  //                     longitude: locations.long,
+  //                     type_id: type,
+  //                     user_id: info.UserId,
+  //                     picture: imageUrl,
+  //                     //   entry_type: type !== 159 ? "out" : entryTypes,
+  //                     entry_type: entryTypes,
+  //                     datetime: `${finallDate
+  //                       .reverse()
+  //                       .join("-")} ${date.getHours()}:${date.getMinutes()}`,
+  //                     key: (
+  //                       CRC32.str(
+  //                         `*${info.UserId},${finallDate.reverse().join("-")},${
+  //                           date.getHours() < 10
+  //                             ? `0${date.getHours()}`
+  //                             : date.getHours()
+  //                         }:${
+  //                           date.getMinutes() < 10
+  //                             ? `0${date.getMinutes()}`
+  //                             : date.getMinutes()
+  //                         },${type},${
+  //                           entryTypes === "in" ? "1" : "0"
+  //                           // type !== 159 ? "0" : entryTypes === "in" ? "1" : "0"
+  //                         },${!!locations.lat ? locations.lat : "35.66"},${
+  //                           !!locations.long ? locations.long : "51.4"
+  //                         }*`
+  //                       ) >>> 0
+  //                     ).toString(16),
+  //                   },
+  //                 },
+  //                 {
+  //                   headers: {
+  //                     Authorization: `Bearer ${token}`,
+  //                   },
+  //                 }
+  //               )
+  //               .then((res) => {
+  //                 if (199 < res.data.code && res.data.code < 400) {
+  //                   setLoading(false);
+  //                   loader(false);
+  //                   dispatch(setTraffic(false));
+  //                   setTrafficModal(false);
+  //                   successMessage(".تردد شما با موفقیت ثبت شد");
+  //                 } else {
+  //                   setLoading(false);
+  //                   loader(false);
+  //                   dispatch(setTraffic(false));
+  //                   setTrafficModal(false);
+  //                   errorMessage(res.data.data.notice.message);
+  //                 }
+  //               });
+  //           }
+  //         });
+  //     }
+  //   }
+  // };
   return (
-    <div>
-      {periodModal && (
-        <PeriodModal
-          setSelectedTitle={setSelectedTitle}
-          selectedTitle={"ترددهای من"}
-          setDate={setDate}
-          onClose={setPeriodModal}
-        />
-      )}
-      {requestModal && (
-        <NewReqModal
-          title="اصلاح تردد"
-          items={requestModal}
-          setTrafficModal={setRequestModal}
-        />
-      )}
-      {detailModal && (
-        <DetailModal items={detailModal?.id} onClose={setDetailModal} />
-      )}
-      {editModal && <EditModal items={editModal} setModalType={setEditModal} />}
-      {deleteModal && (
-        <DeleteModal
-          type={"مرخصی"}
-          DeleteHandler={fetchDeleteData}
-          items={deleteModal}
-          onClose={setDeleteModal}
-        />
-      )}
+    <div style={{width:"100%",  display: "flex",
+    width: "100%",
+    alignItems: "flex-end",
+    justifyContent: "center",
+   }}>
       {/* {returnModal && (
         <ReturnModal
           type={"مرخصی"}
@@ -281,12 +196,35 @@ export const MyClocking = () => {
           items={returnModal}
           onClose={setReturnModal}
         />
-      )} */}
-      <Traffics.RequestBody style={{ marginTop: "80px" }}>
-        <Card height="calc(100vh - 250px)" margin="24px 0 0 0">
-          salam
+      )} */}       {trafficModal && (
+        <TrafficModalTest
+        setTakeImage={setTakeImage}
+          setTrafficModal={setTrafficModal}
+          trafficModal={trafficModal}
+          loc={locations}
+          loader={setLoadingCheck}
+        />
+      )}
+        <Card  height="calc(100vh - 250px)" margin="24px 0 0 0">
+        <div style={{ display: "flex", flexDirection: "column",gap:"32px" }}>
+          {true && (
+            <img
+              src={takeImage}
+              alt="Captured Preview"
+              style={{ width: "100%", marginTop: "10px" }}
+            />
+          )}
+          {
+            loading?<LoadingSpinner/>:<Card color="orange">
+              <div style={{display:"flex",flexDirection:"column",margin:"24px",alignItems:"center",justifyContent:"center"}}>
+              <div>عکس گرفته شده مطابقت دارد با:</div>
+              <div>کاربر: سید بردیا شمسی</div>
+              <div>با شماره پرسنلی: 440</div>
+</div>
+              </Card>
+          }
+   </div>
         </Card>
-      </Traffics.RequestBody>
     </div>
   );
 };

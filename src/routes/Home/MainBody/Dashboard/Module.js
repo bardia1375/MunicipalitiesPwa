@@ -11,6 +11,77 @@ const initialState = {
   dailyAssignment: null,
   day: null,
   month: null,
+  users: [
+    {
+      name: "محمود عباسی",
+      Code: "444",
+    },
+    {
+      name: "رضا منیری",
+      Code: "123",
+    },
+    {
+      name: "ابوالفضل آقاسی",
+      Code: "453",
+    },
+    {
+      name: "محمود کریمی",
+      Code: "323",
+    },
+    {
+      name: "سینا باباجانی",
+      Code: "333",
+    },
+    {
+      name: "رضا بنیادی",
+      Code: "22",
+    },
+    {
+      name: "سعید کاظمی",
+      Code: "11",
+    },
+    // 10 more items added below with male names:
+    {
+      name: "ناصر حسینی",
+      Code: "555",
+    },
+    {
+      name: "علی زمانی",
+      Code: "666",
+    },
+    {
+      name: "حسن علیزاده",
+      Code: "777",
+    },
+    {
+      name: "محمدرضا محمدی",
+      Code: "888",
+    },
+    {
+      name: "علی اکبری",
+      Code: "999",
+    },
+    {
+      name: "محمد رحیمیان",
+      Code: "101",
+    },
+    {
+      name: "حسن اسدی",
+      Code: "202",
+    },
+    {
+      name: "حمیدرضا حسینی",
+      Code: "303",
+    },
+    {
+      name: "مصطفی محمدزاده",
+      Code: "404",
+    },
+    {
+      name: "محمدرضا اکبری",
+      Code: "505",
+    },
+  ],
 };
 
 const dashboardSlice = createSlice({
@@ -25,6 +96,14 @@ const dashboardSlice = createSlice({
     setDashboard: (state, { payload }) => {
       return {
         dashboard: payload,
+        loading: false,
+      };
+    },
+    setUsers: (state, { payload }) => {
+      console.log("payloadf",payload);
+      return {
+        ...state,
+        users: payload,
         loading: false,
       };
     },
@@ -69,6 +148,7 @@ const dashboardSlice = createSlice({
 
 export const {
   setDashboard,
+  setUsers,
   setDay,
   setMonth,
   setDailyAssignment,
@@ -93,7 +173,13 @@ export function fetchDashboard(Token) {
       });
   };
 }
-
+// fetch users
+export function fetchUsers(Token, data) {
+  console.log("datadata",data);
+  return async (dispatch) => {
+    await dispatch(setUsers(data));
+  };
+}
 // fetch last traffic
 export function fetchLastTraffic(Token, date) {
   return async (dispatch) => {

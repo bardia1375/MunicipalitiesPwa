@@ -158,10 +158,10 @@ function StatusCard({
     <Dashboard.StatusTypes>
       <Dashboard.StatusList>
         {[
-          { title: "ثبت تردد", Url: "./clocking" },
-          { title: "محدوده تردد", Url: "./trafficRange" },
+          { title: "ثبت تردد", Url: "/clocking" },
+          { title: "محدوده تردد", Url: "/trafficRange" },
           { title: "نمودارها", Url: "/diagram" },
-          { title: "برنامه هفتگی", Url: "./plan" },
+          { title: "برنامه هفتگی", Url: "/weeklyPlan" },
         ].map((item, index) => (
           <Dashboard.StatusItem
             key={index}

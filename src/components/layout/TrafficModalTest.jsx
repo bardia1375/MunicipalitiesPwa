@@ -22,6 +22,7 @@ export const TrafficModalTest = ({
   trafficModal,
   loc,
   loader,
+  setTakeImage
 }) => {
   // Codes of companies which can use camera option
   const codeList = [12345];
@@ -32,6 +33,7 @@ export const TrafficModalTest = ({
   const [cameraButton, setCameraButton] = useState(false);
   const [locations, setLocations] = useState({});
   const dispatch = useDispatch();
+  // const {navigate}=useNavigate()
   // const [presentStatus, setPresentStatus] = useState(
   //   localStorage.getItem("present")
   // );
@@ -152,10 +154,12 @@ export const TrafficModalTest = ({
     reader.onloadend = function () {
       const base64String = reader.result;
       setImage(base64String);
+      setTakeImage(base64String)
       presentHandler(typeKind, base64String);
       setPermission(false);
       setCameraButton(false);
     };
+    console.log("blobblob",blob);
     reader.readAsDataURL(blob);
   }
 
@@ -179,10 +183,15 @@ export const TrafficModalTest = ({
     });
   }
 
-  const presentHandler = (type, imageUrl) => {
+  useEffect(()=>{
+    const type=159
+    console.log("locations",locations);
     if (!!locations.error) {
       console.log("Location Error! :(");
     } else {
+      console.log("permission",permission);
+      console.log("image",image);
+      console.log("codeList.some((x) => x === info.CompanyCode)",codeList.some((x) => x === info.CompanyCode));
       if (
         !permission &&
         !image &&
@@ -224,7 +233,7 @@ export const TrafficModalTest = ({
                       longitude: locations.long,
                       type_id: type,
                       user_id: info.UserId,
-                      picture: imageUrl,
+                      picture: image,
                       //   entry_type: type !== 159 ? "out" : entryTypes,
                       entry_type: entryTypes,
                       datetime: `${finallDate
@@ -275,6 +284,9 @@ export const TrafficModalTest = ({
           });
       }
     }
+  },[image])
+  const presentHandler = (type, imageUrl) => {
+
   };
 
   useEffect(() => {
@@ -402,6 +414,8 @@ export const TrafficModalTest = ({
               {/* Take Picture */}
             </button>
           )}
+
+
           {/* <div
               style={{
                 color: "white",
@@ -443,6 +457,7 @@ export const TrafficModalTest = ({
           <canvas ref={canvasRef} width={320} height={240} />
           {image && <img src={image} alt="User's selfie" />}
         </div>
+        
         {/* </div> */}
         {/* )} */}
       </div>
@@ -484,9 +499,6 @@ export const TrafficModalTest = ({
             </div>
           </Dashboard.Collapse>
         )}
-        <>
-          <div>شروع تایمر</div>
-        </>
       </Body>
     </>
   );

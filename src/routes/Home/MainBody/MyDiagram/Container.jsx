@@ -1,3 +1,4 @@
+import DateNavHeader from "components/DateNavHeader/DateNavHeader";
 import Card from "components/common/Card";
 import React from "react";
 import ReactApexChart from "react-apexcharts";
@@ -67,9 +68,14 @@ export const MyDiagram = () => {
       ],
     },
   };
-
+const getDate=(date)=>{
+ console.log("date",date);
+}
   return (
-    <Card height="calc(100vh - 250px)" margin="24px 0 0 0">
+    <div>
+      <DateNavHeader getDate={getDate}/>
+
+    <Card height="calc(100vh - 450px)" margin="24px 0 0 0">
       <div
         style={{
           height: "100%",
@@ -85,6 +91,7 @@ export const MyDiagram = () => {
           height={350}
         />
       </div>
-    </Card>
+    </Card>    
+  </div>
   );
 };

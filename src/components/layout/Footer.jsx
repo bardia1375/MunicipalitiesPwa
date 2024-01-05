@@ -26,6 +26,8 @@ export const Footer = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [trafficModal, setTrafficModal] = useState(false);
+  const [Timer, setTimer] = useState(false);
+
   const [loadingCheck, setLoadingCheck] = useState(false);
 
   useEffect(() => {
@@ -43,16 +45,18 @@ export const Footer = () => {
   const [endTime, setEndTime] = useState(moment().format("HH:mm"));
 
   const trafficModalController = (date) => {
-    if (trafficModal) {
+    if (Timer) {
       const end = date;
       setEndTime(end);
       successMessage("زمان شما با موفقیت متوقف شد.");
       setTrafficModal(false);
       localStorage.setItem("endTime", moment().format("HH:mm"));
-
+      setTimer(false)
       // const timeDifferenceInMinutes = endTime.diff(startTime, "minutes");
       // console.log("timeDifferenceInMinutes", timeDifferenceInMinutes);
     } else {
+      setTimer(true)
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLocations({
@@ -70,7 +74,8 @@ export const Footer = () => {
       console.log("startTime", startTime);
       localStorage.setItem("startTime", moment().format("HH:mm"));
       successMessage("زمان شما از همین لحظه شروع شد.");
-      setTrafficModal(true);
+      // setTrafficModal(true);
+
     }
   };
   useEffect(() => {
@@ -140,7 +145,7 @@ export const Footer = () => {
         {/* </ButtonAction> */}
 
         <Circle
-          trafficModal={trafficModal}
+          Timer={Timer}
           onClick={
             loadingCheck
               ? null
@@ -149,7 +154,7 @@ export const Footer = () => {
         >
           {loadingCheck ? (
             <LoadingSpinner />
-          ) : trafficModal ? (
+          ) : Timer ? (
             <h3 style={{ color: "white" }}>پایان</h3>
           ) : (
             <h3 style={{ color: "white" }}>شروع</h3>
@@ -191,8 +196,8 @@ export const Footer = () => {
 };
 
 export const Circle = styled.div`
-  width: ${({ trafficModal }) => (trafficModal ? "70px" : "80px")};
-  height: ${({ trafficModal }) => (trafficModal ? "70px" : "80px")};
+  width: ${({ Timer }) => (Timer ? "70px" : "80px")};
+  height: ${({ Timer }) => (Timer ? "70px" : "80px")};
   border-radius: 50%;
   position: absolute;
   top: 0%;
@@ -203,8 +208,8 @@ export const Circle = styled.div`
   transform: translate(-50%, -50%);
   cursor: pointer;
   /* background-color: #41b9c4; */
-  background-image: ${({ trafficModal }) =>
-    trafficModal
+  background-image: ${({ Timer }) =>
+    Timer
       ? "linear-gradient(to bottom left, #ff8b71, #ffa74a);"
       : "linear-gradient(to bottom left, #3fb6c1, #54d3db);"};
   box-shadow: -1px 10px 20px -2px rgba(0, 0, 0, 0.3);

@@ -16,6 +16,7 @@ import {
   fetchLastLeaves,
   fetchLastTraffic,
   fetchMyAssignments,
+  fetchUsers
 } from "./Module";
 
 // Styles
@@ -30,6 +31,7 @@ import "leaflet/dist/leaflet.css"; // Import Leaflet CSS
 import MapComponent from "./MapComponent";
 import styled from "styled-components";
 import { Button } from "components/common";
+import DateNavHeader from "components/DateNavHeader/DateNavHeader";
 
 let dayLimit = 60;
 let monthLimit = 12;
@@ -37,9 +39,12 @@ export const Container = () => {
   // States && Hooks
   const dispatch = useDispatch();
   const { Token } = useSelector((state) => state.auth);
-  const { day, month, clocking, leaves, assignments, loading } = useSelector(
+  const { day, month, clocking, leaves, assignments, loading,users } = useSelector(
     (state) => state.dashboard
   );
+  console.log("users",users);
+
+
   const today = new Date();
   const [selectedTitle, setSelectedTitle] = useState("امروز");
   const [selectedReport, setSelectedReport] = useState("کارکرد من");
@@ -158,6 +163,86 @@ export const Container = () => {
     }
   }
 
+
+
+
+
+  const user= [
+    {
+      name: "محمود عباسی",
+      Code: "444",
+    },
+    {
+      name: "رضا منیری",
+      Code: "123",
+    },
+    {
+      name: "ابوالفضل آقاسی",
+      Code: "453",
+    },
+    {
+      name: "محمود کریمی",
+      Code: "323",
+    },
+    {
+      name: "سینا باباجانی",
+      Code: "333",
+    },
+    {
+      name: "رضا بنیادی",
+      Code: "22",
+    },
+    {
+      name: "سعید کاظمی",
+      Code: "11",
+    },
+    // 10 more items added below with male names:
+    {
+      name: "ناصر حسینی",
+      Code: "555",
+    },
+    {
+      name: "علی زمانی",
+      Code: "666",
+    },
+    {
+      name: "حسن علیزاده",
+      Code: "777",
+    },
+    {
+      name: "محمدرضا محمدی",
+      Code: "888",
+    },
+    {
+      name: "علی اکبری",
+      Code: "999",
+    },
+    {
+      name: "محمد رحیمیان",
+      Code: "101",
+    },
+    {
+      name: "حسن اسدی",
+      Code: "202",
+    },
+    {
+      name: "حمیدرضا حسینی",
+      Code: "303",
+    },
+    {
+      name: "مصطفی محمدزاده",
+      Code: "404",
+    },
+    {
+      name: "محمدرضا اکبری",
+      Code: "505",
+    },
+  ]
+  useEffect(() => {
+    localStorage.setItem('users', JSON.stringify(user));
+
+    dispatch(fetchUsers(user));
+  }, [dispatch]);
   // Set data with selected time frame
   useEffect(() => {
     collapse && openCollapse();
@@ -317,7 +402,10 @@ export const Container = () => {
       </Dashboard.TitleStyle>
     ));
   };
-
+  const getDate=(date)=>{
+    console.log("date",date);
+    
+   }
   return (
     <Dashboard.DashboardBody>
       <div
@@ -331,15 +419,7 @@ export const Container = () => {
         {editModal && (
           <EditModal items={editModal} setModalType={setEditModal} />
         )}
-        {datePicker && (
-          <ModalPicker
-            setMode={setDatePicker}
-            mode={datePicker}
-            onChange={setDate}
-            dateController={setDayShow}
-          />
-          // <DatePicker  onChange={setDate} setModalType={setDatePicker} />
-        )}
+
         {requestModal.type === "Edit" && (
           <EditRequestModal
             items={requestModal.item}
@@ -352,7 +432,7 @@ export const Container = () => {
           date={date}
         /> */}
 
-        <Dashboard.DashboardHeader>
+        {/* <Dashboard.DashboardHeader>
           <HeaderTitle />
         </Dashboard.DashboardHeader>
         <Dashboard.DashboardHeader>
@@ -411,7 +491,10 @@ export const Container = () => {
             src={PrimaryArrow}
             alt=""
           />
-        </Dashboard.DashboardHeader>
+        </Dashboard.DashboardHeader> */}
+<DateNavHeader getDate={getDate}/>
+
+
         {loading || dayShow === null || monthShow === null ? (
           <LoadingSpinner />
         ) : (
