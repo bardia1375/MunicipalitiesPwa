@@ -75,7 +75,7 @@ const getDate=(date)=>{
     <div>
       <DateNavHeader getDate={getDate}/>
 
-    <Card height="calc(100vh - 450px)" margin="24px 0 0 0">
+    <Card height="calc(100vh - 400px)" margin="24px 0 0 0">
       <div
         style={{
           height: "100%",

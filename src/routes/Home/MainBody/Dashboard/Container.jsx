@@ -16,7 +16,7 @@ import {
   fetchLastLeaves,
   fetchLastTraffic,
   fetchMyAssignments,
-  fetchUsers
+  fetchUsers,
 } from "./Module";
 
 // Styles
@@ -32,6 +32,7 @@ import MapComponent from "./MapComponent";
 import styled from "styled-components";
 import { Button } from "components/common";
 import DateNavHeader from "components/DateNavHeader/DateNavHeader";
+// import profilePhoto from "../../../../";
 
 let dayLimit = 60;
 let monthLimit = 12;
@@ -39,11 +40,9 @@ export const Container = () => {
   // States && Hooks
   const dispatch = useDispatch();
   const { Token } = useSelector((state) => state.auth);
-  const { day, month, clocking, leaves, assignments, loading,users } = useSelector(
-    (state) => state.dashboard
-  );
-  console.log("users",users);
-
+  const { day, month, clocking, leaves, assignments, loading, users } =
+    useSelector((state) => state.dashboard);
+  console.log("users", users);
 
   const today = new Date();
   const [selectedTitle, setSelectedTitle] = useState("امروز");
@@ -163,83 +162,107 @@ export const Container = () => {
     }
   }
 
-
-
-
-
-  const user= [
+  const user = [
     {
       name: "محمود عباسی",
       Code: "444",
+      position: [35.739282, 51.429821],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "رضا منیری",
       Code: "123",
+      position: [35.735171, 51.430122],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "ابوالفضل آقاسی",
       Code: "453",
+      position: [35.730887, 51.433729],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "محمود کریمی",
       Code: "323",
+      position: [35.738829, 51.446269],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "سینا باباجانی",
       Code: "333",
+      position: [35.738829, 51.446269],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "رضا بنیادی",
       Code: "22",
+      position: [35.724441, 51.435484],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "سعید کاظمی",
       Code: "11",
+      position: [35.730259, 51.427067],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     // 10 more items added below with male names:
     {
       name: "ناصر حسینی",
       Code: "555",
+      position: [35.730259, 51.437067],
+      State: "عدم تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "علی زمانی",
       Code: "666",
+      position: [35.730259, 51.439067],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "حسن علیزاده",
       Code: "777",
+      position: [35.740259, 51.447067],
+      State: "درانتظار بررسی",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "محمدرضا محمدی",
       Code: "888",
+      position: [35.745259, 51.457067],
+      State: "تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
     {
       name: "علی اکبری",
       Code: "999",
+      position: [35.755259, 51.457067],
+      State: "عدم تایید",
+      Attendance: "مرخصی",
+      ImgUrl: "../../../../assets/images/profilephoto/302321278.jpg",
     },
-    {
-      name: "محمد رحیمیان",
-      Code: "101",
-    },
-    {
-      name: "حسن اسدی",
-      Code: "202",
-    },
-    {
-      name: "حمیدرضا حسینی",
-      Code: "303",
-    },
-    {
-      name: "مصطفی محمدزاده",
-      Code: "404",
-    },
-    {
-      name: "محمدرضا اکبری",
-      Code: "505",
-    },
-  ]
+  ];
   useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(user));
+    localStorage.setItem("users", JSON.stringify(user));
 
     dispatch(fetchUsers(user));
   }, [dispatch]);
@@ -402,10 +425,9 @@ export const Container = () => {
       </Dashboard.TitleStyle>
     ));
   };
-  const getDate=(date)=>{
-    console.log("date",date);
-    
-   }
+  const getDate = (date) => {
+    console.log("date", date);
+  };
   return (
     <Dashboard.DashboardBody>
       <div
@@ -492,8 +514,7 @@ export const Container = () => {
             alt=""
           />
         </Dashboard.DashboardHeader> */}
-<DateNavHeader getDate={getDate}/>
-
+        <DateNavHeader getDate={getDate} />
 
         {loading || dayShow === null || monthShow === null ? (
           <LoadingSpinner />

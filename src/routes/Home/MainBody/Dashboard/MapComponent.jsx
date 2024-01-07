@@ -39,16 +39,11 @@ const CircularMarker = styled.div`
 
 function MapComponent({ userLocation }) {
   const mapRef = useRef(null); // Ref to store the map instance
-
-  const [positions, setPositions] = useState([
-    [35.739282, 51.429821], // Example coordinates for Point 1
-    [35.735171, 51.430122], // Example coordinates for Point 1
-    [35.730887, 51.433729], // Example coordinates for Point 1
-    [35.738829, 51.446269], // Example coordinates for Point 2
-    [35.738829, 51.446269], // Example coordinates for Point 3
-    [35.724441, 51.435484], // Example coordinates for Point 2
-    [35.730259, 51.427067], // Example coordinates for Point 3
-  ]);
+  const Users = JSON.parse(localStorage.getItem("users"));
+  const position = Users.map((res) => res.position);
+  const ImgUrl = Users.map((res) => res.ImgUrl);
+  console.log("UsersUsers", Users);
+  const [positions, setPositions] = useState(position);
   const [positionSearch, setPositionSearch] = useState(positions[0]);
   const LocateControl = () => {
     const map = useMap();
@@ -113,6 +108,7 @@ function MapComponent({ userLocation }) {
   //   );
   // }, []); // Empty dependency array ensures the effect runs only once
   console.log("userLocation", userLocation);
+
   const polyline = [
     [35.739282, 51.429821], // Example coordinates for Point 1
     [35.735171, 51.430122], // Example coordinates for Point 2
@@ -262,19 +258,18 @@ function MapComponent({ userLocation }) {
         </Marker>
       )}
       <MarkerClusterGroup>
-        {positions.map((position, index) => (
-          <Marker key={index} position={position}>
-            <Popup>
+        {Users.map((el, index) => (
+          <Marker key={index} position={el.position}>
+            <StyledPopup state={el.State}>
               <div style={{ textAlign: "center" }}>
-                <CircularMarker>
-                  <img
-                    src={require("../../../../assets/images/profilephoto/302321278.jpg")}
-                    alt={`Point ${index + 1}`}
-                  />
-                </CircularMarker>
-                <div>جواد مقبلی</div>
+                {/* <CircularMarker>
+                  <img src={require(el.ImgUrl)} alt={`Point ${index + 1}`} />
+                </CircularMarker> */}
+                <div>{el.name}</div>
+                <div>کدپرسنلی:{el.Code}</div>
+                <div>{el.State}</div>
               </div>
-            </Popup>
+            </StyledPopup>
           </Marker>
         ))}
       </MarkerClusterGroup>
@@ -284,3 +279,22 @@ function MapComponent({ userLocation }) {
 }
 
 export default MapComponent;
+
+const StyledPopup = styled(Popup)`
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background-color: ${(props) =>
+      props.state === "تایید"
+        ? "green"
+        : props.state === "عدم تایید"
+        ? "red"
+        : "orange"};
+    color:#fff;
+    font-family:Yekan Bakh
+    /* Set your desired background color here */
+  }
+  }
+
+  color: white; /* Set the text color */
+  padding: 10px; /* Set padding as needed */
+`;
