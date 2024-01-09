@@ -23,7 +23,7 @@ import { DeleteModal } from "components/common/DeleteModal";
 import { DetailModal } from "../MyTraffics/DetailModal";
 import Card from "components/common/Card";
 import { TrafficModalTest } from "components/layout/TrafficModalTest";
-import styled  from "styled-components";
+import styled from "styled-components";
 
 export const MyClocking = () => {
   // States && Hooks
@@ -33,11 +33,12 @@ export const MyClocking = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
 
-  const info = JSON.parse(localStorage.getItem("personsData"));
+  const info = JSON.parse(localStorage.getItem("users"));
+  
   const [trafficModal, setTrafficModal] = useState(true);
   const [loadingCheck, setLoadingCheck] = useState(false);
   const [locations, setLocations] = useState({});
-  const [takeImage,setTakeImage]=useState("")
+  const [takeImage, setTakeImage] = useState("");
   // Getting types from api
   // useEffect(() => {
   //   myApi
@@ -51,20 +52,18 @@ export const MyClocking = () => {
   //     });
   // }, []);
 
-
-
   // Increasing page by one
   const increasePage = () => {
     setPage(page + 1);
   };
 
-useEffect(()=>{
-  setLoading(true)
+  useEffect(() => {
+    setLoading(true);
 
-setTimeout(() => {
-  setLoading(false)
-}, 5000);
-},[takeImage])
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }, [takeImage]);
   const trafficModalController = () => {
     if (trafficModal) {
       setTrafficModal(false);
@@ -85,7 +84,7 @@ setTimeout(() => {
       setTrafficModal(true);
     }
   };
-console.log("takeImage",takeImage);
+  console.log("takeImage", takeImage);
   // const presentHandler = (type=159, imageUrl) => {
   //   if (!!locations.error) {
   //     console.log("Location Error! :(");
@@ -184,11 +183,15 @@ console.log("takeImage",takeImage);
   //   }
   // };
   return (
-    <div style={{width:"100%",  display: "flex",
-    width: "100%",
-    alignItems: "flex-end",
-    justifyContent: "center",
-   }}>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        width: "100%",
+        alignItems: "flex-end",
+        justifyContent: "center",
+      }}
+    >
       {/* {returnModal && (
         <ReturnModal
           type={"مرخصی"}
@@ -196,17 +199,18 @@ console.log("takeImage",takeImage);
           items={returnModal}
           onClose={setReturnModal}
         />
-      )} */}       {trafficModal && (
+      )} */}{" "}
+      {trafficModal && (
         <TrafficModalTest
-        setTakeImage={setTakeImage}
+          setTakeImage={setTakeImage}
           setTrafficModal={setTrafficModal}
           trafficModal={trafficModal}
           loc={locations}
           loader={setLoadingCheck}
         />
       )}
-        <Card  height="calc(100vh - 250px)" margin="24px 0 0 0">
-        <div style={{ display: "flex", flexDirection: "column",gap:"32px" }}>
+      <Card height="calc(100vh - 250px)" margin="24px 0 0 0">
+        <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
           {true && (
             <img
               src={takeImage}
@@ -214,17 +218,27 @@ console.log("takeImage",takeImage);
               style={{ width: "100%", marginTop: "10px" }}
             />
           )}
-          {
-            loading?<LoadingSpinner/>:<Card color="orange">
-              <div style={{display:"flex",flexDirection:"column",margin:"24px",alignItems:"center",justifyContent:"center"}}>
-              <div>عکس گرفته شده مطابقت دارد با:</div>
-              <div>کاربر: سید بردیا شمسی</div>
-              <div>با شماره پرسنلی: 440</div>
-</div>
-              </Card>
-          }
-   </div>
-        </Card>
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            <Card color="orange">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  margin: "24px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div>عکس گرفته شده مطابقت دارد با:</div>
+                <div>کاربر: سید بردیا شمسی</div>
+                <div>با شماره پرسنلی: 440</div>
+              </div>
+            </Card>
+          )}
+        </div>
+      </Card>
     </div>
   );
 };

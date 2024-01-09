@@ -208,9 +208,7 @@ export const Menu = ({ setOpenModal, openModal }) => {
         </div>
         <div>
           <MenuList>
-            <Item onClick={() => clickHandler("/profile")}>
-              <img width={25} src={MyCoworker} alt={"MyCoworker"} />
-            </Item>
+
             <Item onClick={() => clickHandler("/clocking")}>
               <img width={25} src={MyTraffic} alt={"MyTraffic"} /> ثبت تردد
             </Item>

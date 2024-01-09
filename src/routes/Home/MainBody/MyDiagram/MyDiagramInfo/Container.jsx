@@ -1,7 +1,7 @@
 import Card from "components/common/Card";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import profile from "assets/images/profilephoto/302321278.jpg";
 import { Field } from "components/common/Field";
 import { Dropdown } from "components/common";
@@ -9,88 +9,74 @@ import { Dropdown } from "components/common";
 export const MyDiagramInfo = () => {
   // Data for the pie chart
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const date = localStorage.getItem("date");
+
+  const { Title } = state; // Read values passed on state
+  console.log("TitleTitle", Title);
   const setSelectedState = (data) => {
     if (data.Title == "ماموریت") {
-      navigate("/diagram/misiion");
+      navigate("/diagram/misiion", { state: { Title: "ماموریت", date } });
     } else if (data.Title == "حضور") {
-      navigate("/diagram/present");
+      navigate("/diagram/present", { state: { Title: "حضور", date } });
     } else if (data.Title == "مرخصی") {
-      navigate("/diagram/leave");
+      navigate("/diagram/leave", { state: { Title: "مرخصی", date } });
     } else if (data.Title == "غیبت") {
-      navigate("/diagram/absence");
+      navigate("/diagram/absence", { state: { Title: "غیبت", date } });
     }
   };
-  const Personels = [
-    {
-      name: "محمود عباسی",
-      Code: "444",
-    },
-    {
-      name: "رضا منیری",
-      Code: "123",
-    },
-    {
-      name: "ابوالفضل آقاسی",
-      Code: "453",
-    },
-    {
-      name: "محمود کریمی",
-      Code: "323",
-    },
-    {
-      name: "سینا باباجانی",
-      Code: "333",
-    },
-    {
-      name: "رضا بنیادی",
-      Code: "22",
-    },
-    {
-      name: "سعید کاظمی",
-      Code: "11",
-    },
-    // 10 more items added below with male names:
-    {
-      name: "ناصر حسینی",
-      Code: "555",
-    },
-    {
-      name: "علی زمانی",
-      Code: "666",
-    },
-    {
-      name: "حسن علیزاده",
-      Code: "777",
-    },
-    {
-      name: "محمدرضا محمدی",
-      Code: "888",
-    },
-    {
-      name: "علی اکبری",
-      Code: "999",
-    },
-    {
-      name: "محمد رحیمیان",
-      Code: "101",
-    },
-    {
-      name: "حسن اسدی",
-      Code: "202",
-    },
-    {
-      name: "حمیدرضا حسینی",
-      Code: "303",
-    },
-    {
-      name: "مصطفی محمدزاده",
-      Code: "404",
-    },
-    {
-      name: "محمدرضا اکبری",
-      Code: "505",
-    },
-  ];
+  const x = JSON.parse(localStorage.getItem("users"));
+  const info = x?.filter((res) => res?.Date == date)[0]?.persons;
+
+  console.log("datedatedate", date);
+  console.log("infoinfoinfo", info);
+  const [AttendaceArray, setAttendaceArray] = useState([]);
+  useEffect(() => {
+    const Attendace = info.filter((el) => el.Attendance === Title);
+    setAttendaceArray(Attendace);
+  }, [Title]);
+  const PersonelsHandler = () => {
+    return AttendaceArray.map((Personel) => (
+      <Card color="#def0f2">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            // background: "rgb(0, 227, 150)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            <img
+              src={profile}
+              width="50px"
+              height="50px"
+              style={{
+                borderRadius: "50%",
+              }}
+            />
+
+            <div
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <h4>{Personel.name}</h4>
+              <p>کدپرسنلی: {Personel.Code} </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+    ));
+  };
 
   return (
     <div>
@@ -116,54 +102,33 @@ export const MyDiagramInfo = () => {
               { id: 3, Title: "غیبت" },
             ]}
           />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr ",
-              gap: "8px",
-            }}
-          >
-            {Personels.map((Personel) => (
-              <Card color="#def0f2">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    // background: "rgb(0, 227, 150)",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <img
-                      src={profile}
-                      width="50px"
-                      height="50px"
-                      style={{
-                        borderRadius: "50%",
-                      }}
-                    />
+          {/* <div style={{ position: "absolute", top: "8px", right: "20px" }}>
+            <span>{date}</span>
+          </div> */}
 
-                    <div
-                      style={{
-                        textAlign: "center",
-                      }}
-                    >
-                      <h4>{Personel.name}</h4>
-                      <p>کدپرسنلی: {Personel.Code} </p>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+          {AttendaceArray.length !== 0 ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr ",
+                gap: "8px",
+              }}
+            >
+              {PersonelsHandler()}
+            </div>
+          ) : (
+            <div
+              style={{
+                position: "absolute",
+                top: "50%" /* position the top  edge of the element at the middle of the parent */,
+                left: " 50%" /* position the left edge of the element at the middle of the parent */,
+
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              داده ای جهت نمایش وجود ندارد.
+            </div>
+          )}
         </div>
       </Card>{" "}
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinner from "components/common/publicTable/loading/LoadingSpinner";
 import { Traffics } from "assets/styles/home/traffics";
 import moment from "moment-jalaali";
@@ -12,7 +12,8 @@ import { Dashboard } from "assets/styles/home/dashboard";
 // Images
 import Leave from "assets/images/common/dashboard/leave.svg";
 import Mission from "assets/images/common/dashboard/mission.svg";
-import Workout from "assets/images/common/dashboard/workout.svg";
+import piechart from "assets/images/common/dashboard/piechart-svgrepo.svg";
+import plan from "assets/images/common/dashboard/plan-svgrepo.svg";
 import DarkGreyWorkout from "assets/images/common/dashboard/grey-workout.svg";
 import Arrow from "assets/images/common/arrows/red-down.svg";
 import OrangeArrow from "assets/images/common/dashboard/orange-arrow.svg";
@@ -22,6 +23,7 @@ import SelectedMission from "assets/images/common/dashboard/selected-mission.svg
 import SelectedWorkout from "assets/images/common/dashboard/selected-workout.svg";
 import myApi from "config/axios";
 import { useSelector } from "react-redux";
+import Card from "components/common/Card";
 
 function StatusCard({
   lastTraffics,
@@ -38,6 +40,7 @@ function StatusCard({
 }) {
   // States && Hooks
   const navigate = useNavigate();
+  const location = useLocation();
   const ref = useRef();
   const info = JSON.parse(localStorage.getItem("personsData"));
   const [dateLoading, setDateLoading] = useState(false);
@@ -46,6 +49,7 @@ function StatusCard({
   const [lastShow, setLastShow] = useState(lastTraffics);
   const [openOption, setOpenOption] = useState("");
   const [types, setTypes] = useState(null);
+  const TravelTime = localStorage.getItem("TravelTime");
 
   // Getting types from api
   useEffect(() => {
@@ -154,63 +158,84 @@ function StatusCard({
       setLastShow(lastLeaves);
     }
   }, [selectedReport, lastTraffics, lastAssignments, lastLeaves]);
+  const Timer = () => {
+    const Time = TravelTime.split(":");
+    return (
+      <div>
+        <span>{Time[0]}ساعت</span>
+        <span>{Time[1]}دقیقه</span>
+      </div>
+    );
+  };
   return (
     <Dashboard.StatusTypes>
-      <Dashboard.StatusList>
-        {[
-          { title: "ثبت تردد", Url: "/clocking" },
-          { title: "محدوده تردد", Url: "/trafficRange" },
-          { title: "نمودارها", Url: "/diagram" },
-          { title: "برنامه هفتگی", Url: "/weeklyPlan" },
-        ].map((item, index) => (
-          <Dashboard.StatusItem
-            key={index}
-            onClick={() => {
-              navigate(item.Url);
-              // setSelectedReport(item.title);
-              // collapse && openCollapse();
-              // setDateLoading(true);
-              // setTimeout(() => {
-              //   setDateLoading(false);
-              // }, 500);
-            }}
-            selected={selectedReport === item.title}
-          >
-            {selectedReport === item.title ? (
-              <img
-                style={{
-                  width: `${item.title === "کارکرد من" ? "6vw" : "30px"}`,
-                  maxWidth: `${item.title === "کارکرد من" ? "28px" : "30px"}`,
-                }}
-                src={
-                  item.title === "ثبت تردد"
-                    ? SelectedLeave
-                    : item.title === "محدوده تردد"
-                    ? SelectedMission
-                    : SelectedWorkout
-                }
-                alt=""
-              />
-            ) : (
-              <img
-                style={{
-                  width: `${item.title === "کارکرد من" ? "6vw" : "8vw"}`,
-                  maxWidth: `${item.title === "کارکرد من" ? "28px" : "30px"}`,
-                }}
-                src={
-                  item.title === "ثبت تردد"
-                    ? Leave
-                    : item.title === "محدوده تردد"
-                    ? Mission
-                    : Workout
-                }
-                alt=""
-              />
-            )}
-            {item.title}
-          </Dashboard.StatusItem>
-        ))}
-      </Dashboard.StatusList>
+      {location.pathname === "/home" ? (
+        <Dashboard.StatusList>
+          {[
+            { title: "ثبت تردد", Url: "/clocking" },
+            { title: "محدوده تردد", Url: "/trafficRange" },
+            { title: "نمودارها", Url: "/diagram" },
+            { title: "برنامه هفتگی", Url: "/weeklyPlan" },
+          ].map((item, index) => (
+            <Dashboard.StatusItem
+              key={index}
+              onClick={() => {
+                navigate(item.Url);
+                // setSelectedReport(item.title);
+                // collapse && openCollapse();
+                // setDateLoading(true);
+                // setTimeout(() => {
+                //   setDateLoading(false);
+                // }, 500);
+              }}
+              selected={selectedReport === item.title}
+            >
+              {selectedReport === item.title ? (
+                <img
+                  style={{
+                    width: `${item.title === "کارکرد من" ? "6vw" : "30px"}`,
+                    maxWidth: `${item.title === "کارکرد من" ? "28px" : "30px"}`,
+                  }}
+                  src={
+                    item.title === "ثبت تردد"
+                      ? SelectedLeave
+                      : item.title === "محدوده تردد"
+                      ? SelectedMission
+                      : SelectedWorkout
+                  }
+                  alt=""
+                />
+              ) : (
+                <img
+                  style={{
+                    width: `${item.title === "کارکرد من" ? "6vw" : "8vw"}`,
+                    maxWidth: `${item.title === "کارکرد من" ? "28px" : "30px"}`,
+                  }}
+                  src={
+                    item.title === "ثبت تردد"
+                      ? Leave
+                      : item.title === "محدوده تردد"
+                      ? Mission
+                      : item.title === "نمودارها"
+                      ? piechart
+                      : plan
+                  }
+                  alt=""
+                />
+              )}
+              {item.title}
+            </Dashboard.StatusItem>
+          ))}
+        </Dashboard.StatusList>
+      ) : (
+        <Card color={"#fff"} margin={"12px 0"} height={"100%"}>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <div>مدت زمان سفر شما: </div>
+            <div> {Timer()}</div>
+          </div>
+          <div> مسیر حرکتی شما در نقشه بالا با رنگ سبز مشخص شده است.</div>
+        </Card>
+      )}
       {/* <Dashboard.TotalTime>
         <div
           style={{

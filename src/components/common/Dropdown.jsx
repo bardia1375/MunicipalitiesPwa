@@ -100,11 +100,11 @@ export const Dropdown = ({
             {dropItems}
           </SelectDropdown>
         )}
-        <img
+        {/* <img
           src={imageSrc}
           alt="arrow"
           style={showDrop ? { transform: "rotate(180deg)" } : {}}
-        />
+        /> */}
       </StyledSelect>
     </StyledDropdown>
   );

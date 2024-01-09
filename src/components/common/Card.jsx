@@ -6,7 +6,7 @@ const CardContainer = styled.div`
   border-radius: 30px;
   padding: 8px 15px;
   height: ${(props) => (props.height ? props.height : "100%")};
-
+  position: relative;
   width: 100%;
   gap: 3vh;
   display: flex;

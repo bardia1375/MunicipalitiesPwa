@@ -6,9 +6,9 @@ import { FooterStyles } from "assets/styles/layout";
 
 // Images
 import Home from "assets/images/footer/home.svg";
-import Message from "assets/images/footer/message.svg";
+import Message from "assets/images/footer/back-arrow.svg";
 import SelectedHome from "assets/images/footer/home-selected.svg";
-import SelectedMessage from "assets/images/footer/message-selected.svg";
+import SelectedMessage from "assets/images/footer/back-selected.svg";
 import LongArrow from "assets/images/common/arrows/long-arrow.svg";
 import Close from "assets/images/common/dashboard/close.svg";
 import styled from "styled-components";
@@ -43,7 +43,7 @@ export const Footer = () => {
   const [locations, setLocations] = useState({});
   const [startTime, setStartTime] = useState(moment().format("HH:mm"));
   const [endTime, setEndTime] = useState(moment().format("HH:mm"));
-
+  const [showModal, setShowModal] = useState(false);
   const trafficModalController = (date) => {
     if (Timer) {
       const end = date;
@@ -51,12 +51,13 @@ export const Footer = () => {
       successMessage("زمان شما با موفقیت متوقف شد.");
       setTrafficModal(false);
       localStorage.setItem("endTime", moment().format("HH:mm"));
-      setTimer(false)
+      setTimer(false);
+      navigate("trafficRange");
       // const timeDifferenceInMinutes = endTime.diff(startTime, "minutes");
       // console.log("timeDifferenceInMinutes", timeDifferenceInMinutes);
     } else {
-      setTimer(true)
-
+      setTimer(true);
+      localStorage.setItem("dateForTimer", moment().format("jYYYY-jMM-jDD"));
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLocations({
@@ -75,12 +76,12 @@ export const Footer = () => {
       localStorage.setItem("startTime", moment().format("HH:mm"));
       successMessage("زمان شما از همین لحظه شروع شد.");
       // setTrafficModal(true);
-
     }
   };
   useEffect(() => {
     const start = localStorage.getItem("startTime");
     const end = localStorage.getItem("endTime");
+    const dateForTimer = localStorage.getItem("dateForTimer");
     const getMinutesSinceMidnight = (time) => {
       if (time) {
         const [hours, minutes] = time?.split(":").map(Number);
@@ -94,16 +95,26 @@ export const Footer = () => {
     console.log("startMinutes", startMinutes);
     console.log("endMinutes", endMinutes);
     const timeDifferenceMinutes = endMinutes - startMinutes;
-
-    // Calculate hours and remaining minutes
-    const hours = Math.floor(timeDifferenceMinutes / 60);
-    const remainingMinutes = timeDifferenceMinutes % 60;
-
-    console.log("Time difference in minutes:", timeDifferenceMinutes);
+    console.log("date", dateForTimer);
     console.log(
-      "Time difference in hours and minutes:",
-      `${hours} hours and ${remainingMinutes} minutes`
+      "moment().format(jYYYY-jMM-jDD)",
+      moment().format("jYYYY-jMM-jDD")
     );
+    // Calculate hours and remaining minutes
+    if (
+      (startMinutes < endMinutes || startMinutes == endMinutes) &&
+      dateForTimer == moment().format("jYYYY-jMM-jDD")
+    ) {
+      const hours = Math.floor(timeDifferenceMinutes / 60);
+      const remainingMinutes = timeDifferenceMinutes % 60;
+      localStorage.setItem("TravelTime", `${hours}:${remainingMinutes}`);
+      console.log("Time difference in minutes:", timeDifferenceMinutes);
+      console.log(
+        "Time difference in hours and minutes:",
+        `${hours} hours and ${remainingMinutes} minutes`
+      );
+    }
+
     // // Compare start and end times
     // if (startMinutes < endMinutes || startMinutes == endMinutes) {
     //   // Do something when start time is greater than end time

@@ -8,7 +8,7 @@ import { MyTraffics } from "./MyTraffics/Container";
 import { WorkReport } from "./WorkReport/Container";
 import { MyWeeklyPlan } from "./MyWeeklyPlan/Container";
 import { MyAssignments } from "./MyAssignments/Container";
-import { MyWorker } from "./MyWorker/Container";
+import { MyWorker } from "./MyWeeklyPlan/MyWorker/Container";
 import { MyDiagram } from "./MyDiagram/Container";
 import { MyDiagramInfo } from "./MyDiagram/MyDiagramInfo/Container";
 import { MyClocking } from "./MyClocking/Container";
@@ -45,15 +45,16 @@ const routes = {
       path: "/clocking",
       element: <MyClocking />,
     },
-    {
-      name: "clocking",
-      path: "/clocking/:id",
-      element: <MyWorker />,
-    },
+
+    // {
+    //   name: "trafficRange",
+    //   path: "/trafficRange",
+    //   element: <MyTraffics />,
+    // },
     {
       name: "trafficRange",
       path: "/trafficRange",
-      element: <MyTraffics />,
+      element: <HomePage />,
     },
     {
       name: "weeklyPlan",

@@ -34,7 +34,7 @@ const Day = ({
     changeMode(false);
     setComingDate();
     // setMode(!mode);
-    navigate(`/clocking/${selectedDay}`);
+    navigate(`/weeklyPlan/${selectedDay}`);
   };
 
   // const mouseEnterHandler = () => {

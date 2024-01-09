@@ -110,6 +110,7 @@ export const Home = styled.img`
 
 export const Messages = styled.img`
   /* margin: 0px 3px; */
+  width:30px;
   /* background: ${({ selected }) =>
     selected === "Twitter" ? "rgba(214, 238, 244, 0.95)" : null};
   border: ${({ selected }) =>

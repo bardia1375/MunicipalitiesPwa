@@ -37,7 +37,7 @@ export const TitleStyle = styled.div`
   border-radius: 30px;
   font-size: 2vh;
   font-weight: 400;
-  width: 50%;
+  width: 100%;
   text-align: center;
   white-space: nowrap;
   margin: 5px;

@@ -37,14 +37,68 @@ const CircularMarker = styled.div`
   }
 `;
 
-function MapComponent({ userLocation }) {
+function MapComponent({ userLocation, date }) {
   const mapRef = useRef(null); // Ref to store the map instance
-  const Users = JSON.parse(localStorage.getItem("users"));
-  const position = Users.map((res) => res.position);
-  const ImgUrl = Users.map((res) => res.ImgUrl);
+  const x = JSON.parse(localStorage.getItem("users"));
+  const Users = x?.filter((res) => res?.Date == date)[0]?.persons;
+  const position = x
+    ?.filter((res) => res.Date == date)[0]
+    ?.persons.map((el) => el.position);
   console.log("UsersUsers", Users);
+  console.log("positionposition", position);
   const [positions, setPositions] = useState(position);
-  const [positionSearch, setPositionSearch] = useState(positions[0]);
+  const [positionSearch, setPositionSearch] = useState(
+    positions ? positions[0] : 
+    [
+        35.739282,
+        51.429821
+    ],
+    [
+        35.735171,
+        51.430122
+    ],
+    [
+        35.730887,
+        51.433729
+    ],
+    [
+        35.738829,
+        51.446269
+    ],
+    [
+        35.738829,
+        51.446269
+    ],
+    [
+        35.724441,
+        51.435484
+    ],
+    [
+        35.730259,
+        51.427067
+    ],
+    [
+        35.730259,
+        51.437067
+    ],
+    [
+        35.730259,
+        51.439067
+    ],
+    [
+        35.740259,
+        51.447067
+    ],
+    [
+        35.745259,
+        51.457067
+    ],
+    [
+        35.755259,
+        51.457067
+    ]
+
+  );
   const LocateControl = () => {
     const map = useMap();
 
@@ -258,7 +312,7 @@ function MapComponent({ userLocation }) {
         </Marker>
       )}
       <MarkerClusterGroup>
-        {Users.map((el, index) => (
+        {Users?.map((el, index) => (
           <Marker key={index} position={el.position}>
             <StyledPopup state={el.State}>
               <div style={{ textAlign: "center" }}>
