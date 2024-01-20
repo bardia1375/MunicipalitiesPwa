@@ -99,7 +99,7 @@ export const EmployeesListHelper = () => {
               ref={nameRef}
               isHead={false}
             >
-              {info?.FirstName} {info?.LastName}
+             مامور پاکبان
             </FullInfo>
           </FullInfoBody>
         </div>

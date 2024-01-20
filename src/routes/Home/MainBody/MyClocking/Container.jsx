@@ -62,7 +62,7 @@ export const MyClocking = () => {
 
     setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 1000);
   }, [takeImage]);
   const trafficModalController = () => {
     if (trafficModal) {
@@ -182,6 +182,8 @@ export const MyClocking = () => {
   //     }
   //   }
   // };
+  const person=JSON.parse(localStorage.getItem("personsData"))
+  console.log("personperson",person);
   return (
     <div
       style={{
@@ -232,8 +234,8 @@ export const MyClocking = () => {
                 }}
               >
                 <div>عکس گرفته شده مطابقت دارد با:</div>
-                <div>کاربر: سید بردیا شمسی</div>
-                <div>با شماره پرسنلی: 440</div>
+                <div>کاربر:{`${person?.FirstName} ${person?.LastName}`}</div>
+                <div>{person?.Position}</div>
               </div>
             </Card>
           )}

@@ -206,82 +206,15 @@ export const TrafficModalTest = ({
         loader(true);
         axios
           .get(
-            `${api.api}/v1/ta/clockings?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=1&page=0`,
+            ``,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }
           )
-          .then((res) => {
-            if (
-              res.data.data.clockings[0].datetime.split(" ")[1] ===
-              jMoment().format("HH:mm:00")
-            ) {
-              errorMessage("!لطفا یک دقیقه منتظر بمانید");
-              setImage(null);
-              setLoading(false);
-              loader(false);
-            } else {
-              dispatch(setTraffic(true));
-              axios
-                .post(
-                  `${api.api}/v1/ta/clockings`,
-                  {
-                    clocking: {
-                      latitude: locations.lat,
-                      longitude: locations.long,
-                      type_id: type,
-                      user_id: info.UserId,
-                      picture: image,
-                      //   entry_type: type !== 159 ? "out" : entryTypes,
-                      entry_type: entryTypes,
-                      datetime: `${finallDate
-                        .reverse()
-                        .join("-")} ${date.getHours()}:${date.getMinutes()}`,
-                      key: (
-                        CRC32.str(
-                          `*${info.UserId},${finallDate.reverse().join("-")},${
-                            date.getHours() < 10
-                              ? `0${date.getHours()}`
-                              : date.getHours()
-                          }:${
-                            date.getMinutes() < 10
-                              ? `0${date.getMinutes()}`
-                              : date.getMinutes()
-                          },${type},${
-                            entryTypes === "in" ? "1" : "0"
-                            // type !== 159 ? "0" : entryTypes === "in" ? "1" : "0"
-                          },${!!locations.lat ? locations.lat : "35.66"},${
-                            !!locations.long ? locations.long : "51.4"
-                          }*`
-                        ) >>> 0
-                      ).toString(16),
-                    },
-                  },
-                  {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  }
-                )
-                .then((res) => {
-                  if (199 < res.data.code && res.data.code < 400) {
-                    setLoading(false);
-                    loader(false);
-                    dispatch(setTraffic(false));
-                    setTrafficModal(false);
-                    successMessage(".تردد شما با موفقیت ثبت شد");
-                  } else {
-                    setLoading(false);
-                    loader(false);
-                    dispatch(setTraffic(false));
-                    setTrafficModal(false);
-                    errorMessage(res.data.data.notice.message);
-                  }
-                });
-            }
-          });
+          setTrafficModal(false);
+          successMessage(".چهره شما با موفقیت تشخیص داده شد");
       }
     }
   },[image])
@@ -289,60 +222,60 @@ export const TrafficModalTest = ({
 
   };
 
-  useEffect(() => {
-    setLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        axios
-          .get(
-            `${api.api}/v1/ta/clockings?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=1&page=0`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((res) => {
-            if (
-              res.data.data.clockings[0].datetime.split(" ")[0] !==
-              jMoment().format("YYYY-MM-DD")
-            ) {
-              setEntryType("out");
-            } else {
-              setEntryType(res.data.data.clockings[0].entry_type);
-            }
-            setLoading(false);
-          });
-        setLocations({
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-        });
-      },
-      (error) => {
-        axios
-          .get(
-            `${api.api}/v1/ta/clockings?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=1&page=0`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((res) => {
-            if (
-              res.data.data.clockings[0].datetime.split(" ")[0] !==
-              jMoment().format("YYYY-MM-DD")
-            ) {
-              setEntryType("out");
-            } else {
-              setEntryType(res.data.data.clockings[0].entry_type);
-            }
-            setLoading(false);
-          });
-        setLocations({ error: "دسترسی به موقعیت مکانی شما امکان پذیر نیست." });
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   navigator.geolocation.getCurrentPosition(
+  //     (position) => {
+  //       axios
+  //         .get(
+  //           `${api.api}/v1/ta/clockings?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=1&page=0`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         )
+  //         .then((res) => {
+  //           if (
+  //             res.data.data.clockings[0].datetime.split(" ")[0] !==
+  //             jMoment().format("YYYY-MM-DD")
+  //           ) {
+  //             setEntryType("out");
+  //           } else {
+  //             setEntryType(res.data.data.clockings[0].entry_type);
+  //           }
+  //           setLoading(false);
+  //         });
+  //       setLocations({
+  //         lat: position.coords.latitude,
+  //         long: position.coords.longitude,
+  //       });
+  //     },
+  //     (error) => {
+  //       axios
+  //         .get(
+  //           `${api.api}/v1/ta/clockings?filter_groups[0][filters][0][key]=user_id&filter_groups[0][filters][0][value][0]=${info.UserId}&filter_groups[0][filters][0][operator]=in&sort[0][key]=datetime&sort[0][direction]=DESC&limit=1&page=0`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         )
+  //         .then((res) => {
+  //           if (
+  //             res.data.data.clockings[0].datetime.split(" ")[0] !==
+  //             jMoment().format("YYYY-MM-DD")
+  //           ) {
+  //             setEntryType("out");
+  //           } else {
+  //             setEntryType(res.data.data.clockings[0].entry_type);
+  //           }
+  //           setLoading(false);
+  //         });
+  //       setLocations({ error: "دسترسی به موقعیت مکانی شما امکان پذیر نیست." });
+  //     }
+  //   );
+  // }, []);
 
   function openCollapse() {
     setCollapse(!collapse);
