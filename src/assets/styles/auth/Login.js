@@ -135,7 +135,7 @@ export const LoginButton = styled.button`
 `;
 
 export const LoginBody = styled.div`
-  background-color: #d6eff4;
+  background-color: #ec9214d1;
   height: 100vh;
   width: 100vw;
   max-width: 500px;

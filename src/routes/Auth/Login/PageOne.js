@@ -30,11 +30,11 @@ const PageOne = ({ page, setPage }) => {
         <img src={TikmanLogo} alt="TikmanLogo" />
       </LoginStyles.PageOneImage>
       <LoginStyles.PageOneDetail>
-        <div style={{ color: "#e67205", fontSize: "9vh", fontWeight: "400" }}>
-          تیک‌من
+      <div style={{ color: "#000", fontSize: "6vh", fontWeight: "400",textAlign:"center",whiteSpace:"noWrap" }}>
+          نرم افزار ثبت و تردد
         </div>
-        <div style={{ color: "#183573", fontSize: "7vh", fontWeight: "300" }}>
-          دستیار من
+        <div style={{ color: "#000", fontSize: "5vh", fontWeight: "300" }}>
+          پاکبان
         </div>
       </LoginStyles.PageOneDetail>
     </LoginStyles.PageOneBody>

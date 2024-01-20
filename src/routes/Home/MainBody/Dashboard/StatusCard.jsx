@@ -159,7 +159,13 @@ function StatusCard({
     }
   }, [selectedReport, lastTraffics, lastAssignments, lastLeaves]);
   const Timer = () => {
-    const Time = TravelTime.split(":");
+    let Time =[]
+    if(!!TravelTime){
+       Time = TravelTime?.split(":");
+    }else{
+       Time =[0,0]
+    }
+    
     return (
       <div>
         <span>{Time[0]}ساعت</span>

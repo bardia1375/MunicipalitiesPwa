@@ -172,7 +172,7 @@ export const Number = styled.div`
 `;
 
 export const InnerBody = styled.div`
-  background-image: linear-gradient(180deg, #d7ebee, #e4f3f4);
+  background-image: linear-gradient(180deg, #e5922f, #e4f3f4);
   border-radius: 50%;
   width: 82%;
   height: 82%;
